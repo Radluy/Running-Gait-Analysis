@@ -1,0 +1,28 @@
+[RUNNING FORM] source: www.runnersworld.com
+ears aligned with shoulders
+looking straight, not down
+shoulders pulled back
+shoulders opposite of legs(X pattern)
+arms 90 degree angle
+elbows close to body
+relaxed hands(probably cant detect)
+straight tall spine
+knee in line with middle of foot
+knee less then 90 degree up
+shin perpendicular when hitting ground
+hit ground with ball of foot
+
+VPN do skoly -> kniznica
+
+defaultny obsah sablony -> diplomka o tom ako pisat diplomku
+herout: herout.net
+
+keywords -> abstrakt -> struktura textu(kapitoly, obrazky, rozsahy)
+-> uvod(1) -> research(state of the art)(1/3) -> navrh(1/3) -> implementacia(1/3) -> zaver(1)
+
+2017 posetrack dataset rankings
+lighttrack -> convolution method
+
+[CITATIONS]:
+https://www.who.int/news-room/fact-sheets/detail/physical-activity
+

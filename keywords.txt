@@ -1,0 +1,3 @@
+artifical intelligence, neural networks, computer vision, skelet detection, 
+running form, running, running gait, AI, movement detection, body position,
+camera, biometrics, Python, Anaconda, PyTorch, kinematics

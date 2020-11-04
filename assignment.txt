@@ -1,0 +1,6 @@
+1. Become familiar with existing tools for running motion analysis. Focus on solutions that use cameras.
+2. Summarize available tools of computer vision for human movement analysis. Mainly get familiar with skeleton detection algorithms.
+3. Draft a solution using two cameras that will record human movement. One camera should record the person from the front and the other from the side.
+4. Implement the drafted plan with software, that will merge data from both cameras and save body position for individual time stamps.
+5. Test the solution on your own videos. Discuss possible use cases for this system.
+
