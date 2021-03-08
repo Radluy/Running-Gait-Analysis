@@ -22,9 +22,12 @@ class Keypoint():
         self.x = x
         self.y = y
         self.confidence = confidence 
+    
+    def __repr__(self):
+        return ("""x: {x}, y: {y}, confidence: {conf}""".format(x=self.x, y=self.y, conf=self.confidence))
 
 
-def load_json(json_directory_path: str): 
+def load_json(json_directory_path: str) -> list: 
     """ load json files from a directory and return as an array of dictionaries"""
     data = []
     files = os.listdir(json_directory_path)
@@ -34,19 +37,19 @@ def load_json(json_directory_path: str):
             json_struct = json.load(json_file)
             try:
                 keypoints = json_struct["people"][0]["pose_keypoints_2d"]
-                keypoint_dict = {}
-                iterator = iter(keypoints)
-                i = 0
-                for x in iterator:
-                    y = next(iterator)
-                    confidence = next(iterator)
-                    keypoint = Keypoint(x, y, confidence)
-                    keypoint_dict[keypoint_order[i]] = keypoint
-                    i += 1
-                data.append(keypoint_dict)
             except:
                 # TODO: log error
-                pass
+                continue
+            keypoint_dict = {}
+            iterator = iter(keypoints)
+            i = 0
+            for x in iterator:
+                y = next(iterator)
+                confidence = next(iterator)
+                keypoint = Keypoint(x, y, confidence)
+                keypoint_dict[keypoint_order[i]] = keypoint
+                i += 1
+            data.append(keypoint_dict)
     return data
 
 
