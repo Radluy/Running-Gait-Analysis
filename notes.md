@@ -79,6 +79,8 @@ bin\OpenPoseDemo.exe --video examples/media/video.avi
 
 --display 0
 
+> bin\OpenPoseDemo.exe --video .\my_data\nick_bare\bare_side.mp4 --write_json .\outputs\bare_side --write_video .\outputs\bare_side.avi --number_people_max 1 --display 0
+
 ## JSON
 
 https://github.com/CMU-Perceptual-Computing-Lab/openpose/blob/master/doc/02_output.md#json-output-format
