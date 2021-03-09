@@ -3,6 +3,7 @@ import sys
 import os
 import pprint
 
+
 # data = [frame1, frame2, ..., frame n]
 # frame = {
 #          knee:  x,y
@@ -10,7 +11,6 @@ import pprint
 #          ...
 #          head:  x,y
 #         }
-#data = []
 
 keypoint_order = ["Nose","Neck","RShoulder","RElbow","RWrist","LShoulder",
                   "LElbow","LWrist","MidHip","RHip","RKnee","RAnkle","LHip",
@@ -41,7 +41,7 @@ def load_json(json_directory_path: str) -> list:
                 keypoints = json_struct["people"][0]["pose_keypoints_2d"]
             except:
                 # TODO: log error
-                print("empty frame!", file=sys.stderr)
+                # print("empty frame!", file=sys.stderr)
                 continue
             keypoint_dict = {}
             keypoint_dict["ID"] = counter

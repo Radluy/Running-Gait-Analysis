@@ -75,6 +75,8 @@ bin\OpenPoseDemo.exe --video examples/media/video.avi
 
 --write_video {OUTPUT_VIDEO_PATH}
 
+--write_images {OUTPUT_IMAGE_DIRECTORY_PATH}
+
 --number_people_max 1
 
 --display 0
