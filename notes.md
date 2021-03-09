@@ -79,7 +79,7 @@ bin\OpenPoseDemo.exe --video examples/media/video.avi
 
 --display 0
 
-> bin\OpenPoseDemo.exe --video .\my_data\nick_bare\bare_side.mp4 --write_json .\outputs\bare_side --write_video .\outputs\bare_side.avi --number_people_max 1 --display 0
+> bin\OpenPoseDemo.exe --video .\my_data\traintracks_data\front1.mp4 --write_json .\outputs\traintrack\front1_json\ --write_video .\outputs\traintrack\front1_est.avi --number_people_max 1 --display 0
 
 ## JSON
 
@@ -133,6 +133,12 @@ https://github.com/CMU-Perceptual-Computing-Lab/openpose/blob/master/doc/advance
 
 1. load json files into structure
 2. figure out important positions in gait cycle
+
+## GUI
+1. import 1 or 2 videos
+2. visualize
+3. print recommendations
+4. save to file
 
 
 
