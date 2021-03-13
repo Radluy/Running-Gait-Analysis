@@ -1,6 +1,6 @@
 import json_load  as jl
-import sys
-
+import pprint
+import metrics_lib
 
 # data = [frame1, frame2, ..., frame n]
 # frame = {
@@ -10,10 +10,9 @@ import sys
 #          head:  x,y
 #         }
 
-epsilon = 20
 
-data = jl.load_json(sys.argv[1])
-for frame in data:
-    difference = abs(frame["RHeel"].y - frame["RBigToe"].y) 
-    if difference < epsilon and frame["RHeel"].confidence != 0 and frame["RBigToe"].confidence != 0:
-        print(frame["ID"])
+if __name__ == "__main__": 
+    data = jl.load_json(sys.argv[1])
+    frames = metrics_lib.torso_lean(data, False)
+    pp = pprint.PrettyPrinter(indent=4)
+    pp.pprint(frames)
