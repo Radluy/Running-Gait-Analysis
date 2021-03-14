@@ -2,7 +2,7 @@ import json
 import sys
 import os
 import pprint
-
+from keypoint_class import Keypoint
 
 # data = [frame1, frame2, ..., frame n]
 # frame = {
@@ -16,16 +16,6 @@ keypoint_order = ["Nose","Neck","RShoulder","RElbow","RWrist","LShoulder",
                   "LElbow","LWrist","MidHip","RHip","RKnee","RAnkle","LHip",
                   "LKnee","LAnkle","REye","LEye","REar","LEar","LBigToe",
                   "LSmallToe","LHeel","RBigToe","RSmallToe", "RHeel", "Background"]
-
-class Keypoint():
-    def __init__(self, x, y, confidence):
-        self.x = x
-        self.y = y
-        self.confidence = confidence 
-    
-    def __repr__(self):
-        return ("""x: {x}, y: {y}, confidence: {conf}""".format(x=self.x, y=self.y, conf=self.confidence))
-
 
 def load_json(json_directory_path: str) -> list: 
     """ load json files from a directory and return as an array of dictionaries"""
