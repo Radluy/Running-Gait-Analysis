@@ -1,6 +1,7 @@
 import json_load  as jl
 import pprint
 import metrics_lib
+import sys
 
 # data = [frame1, frame2, ..., frame n]
 # frame = {
@@ -13,6 +14,6 @@ import metrics_lib
 
 if __name__ == "__main__": 
     data = jl.load_json(sys.argv[1])
-    frames = metrics_lib.torso_lean(data, False)
+    frames = metrics_lib.elbow_angle(data, False)
     pp = pprint.PrettyPrinter(indent=4)
     pp.pprint(frames)
