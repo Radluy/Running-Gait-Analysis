@@ -149,11 +149,12 @@ https://github.com/CMU-Perceptual-Computing-Lab/openpose/blob/master/doc/advance
 3. shin/tibia angle -> extented bad(ankle in front of knee), vertical or flexed good  
 4. knee flexion -> stance phase, ~45 ideal, less bad(find maximum)
 5. hip extension -> late stance(odraz) not sure, <10 prolly bad
-6. torso lean forward (~7)
+6. torso lean forward (~7) [DONE]
 7. Center of Mass vertical displacement -> big bad (use midhip instead of CoM)
-8. elbow angle ~90
+8. elbow angle ~90 [DONE]
 9. legs/arms X pattern
 10. ears aligned with shoulders
-11. 
+
+let stance detector create array of frames -> possible to pass to metrics methods
 
 
