@@ -1,6 +1,7 @@
 import sys
 import utils
 
+
 # data = [frame1, frame2, ..., frame n]
 # frame = {
 #          knee:  x,y
@@ -9,26 +10,25 @@ import utils
 #          head:  x,y
 #         }
 
-def find_stance_phases(data: list) -> list:
-    """Find frames with runner in a stance phase
+def stance_detector(data: list) -> list:
+    """Finds frames with runner in a stance phase
 
     Args:
         list (data): data structure of keypoint positions from pose estimator
 
     Returns:
-        list: array of frame IDs where stance phase was detected
+        list: array of frames with stance phase detected
     """
-    # 30-20-10-15 tested
-    EPSILON = 20
+    EPSILON = 8
     frame_list = []
 
     for frame in data:
-        R_difference = abs(frame["RHeel"].y - frame["RBigToe"].y) 
-        L_difference = abs(frame["LHeel"].y - frame["LBigToe"].y) 
-        if R_difference < EPSILON and frame["RHeel"].confidence != 0 and frame["RBigToe"].confidence != 0:
-            frame_list.append(frame["ID"])
-        if L_difference < EPSILON and frame["LHeel"].confidence != 0 and frame["LBigToe"].confidence != 0:
-            frame_list.append(frame["ID"])   
+        R_angle = abs(utils.angle_2points(frame["RBigToe"], frame["RHeel"]))
+        L_angle = abs(utils.angle_2points(frame["LBigToe"], frame["LHeel"])) 
+        if (R_angle > -EPSILON and R_angle < EPSILON):
+            frame_list.append(frame)
+        if (L_angle > -EPSILON and L_angle < EPSILON):
+            frame_list.append(frame)
 
     return frame_list
     
@@ -47,7 +47,7 @@ def torso_lean(data: list, show_all: bool) -> dict:
     MAX_REGULAR = 10 # maximum value of good torso lean
     degree_dict = {}
     for frame in data:
-        torso_angle = utils.angle_2points(frame["Neck"], frame["MidHip"])
+        torso_angle = utils.angle_2points(frame["Neck"], frame["MidHip"])+90
         if show_all and torso_angle < FILTER:
             degree_dict[frame["ID"]] = torso_angle
         elif torso_angle < FILTER and (torso_angle < MIN_REGULAR or torso_angle > MAX_REGULAR):
@@ -75,8 +75,6 @@ def elbow_angle(data: list, show_all: bool) -> list:
         elif elbow_angle > CORRECT_VAL + EPSILON or elbow_angle < CORRECT_VAL - EPSILON:
             degree_dict[frame["ID"]] = elbow_angle
     return degree_dict
-
-
 
 if __name__ == "__main__": 
     pass
