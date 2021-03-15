@@ -13,7 +13,7 @@ def angle_2points(k1: Keypoint, k2: Keypoint) -> float:
         float: the angle between two keypoints
     """
     radian_angle = math.atan2(k1.y-k2.y, k1.x-k2.x)
-    degrees_angle = math.degrees(radian_angle)+90
+    degrees_angle = math.degrees(radian_angle)
     return degrees_angle
 
 def angle_3points(k1: Keypoint, k2: Keypoint, k3: Keypoint) -> float:
