@@ -19,8 +19,8 @@ def stance_detector(data: list) -> list:
     Returns:
         list: array of frames with stance phase detected
     """
-    FOOT_EXPECTED_ANGLE = 10
-    TIBIA_EXPECTED_ANGLE = 10
+    FOOT_EPSILON = 10
+    TIBIA_EPSILON = 25
     frame_list = []
     keypoints = ["RBigToe", "RHeel", "LBigToe",
                  "LHeel", "RKnee", "RAnkle", "LKnee", "LAnkle"]
@@ -38,9 +38,9 @@ def stance_detector(data: list) -> list:
                 frame["RKnee"], frame["RAnkle"]))
             tibia_L_angle = abs(utils.angle_2points(
                 frame["LKnee"], frame["LAnkle"]))
-            if foot_R_angle > -FOOT_EXPECTED_ANGLE and foot_R_angle < FOOT_EXPECTED_ANGLE and tibia_L_angle < TIBIA_EXPECTED_ANGLE:
+            if (foot_R_angle < FOOT_EPSILON or foot_R_angle > 180 - FOOT_EPSILON) and (tibia_L_angle < TIBIA_EPSILON or tibia_L_angle > 180 - TIBIA_EPSILON):
                 frame_list.append(frame)
-            if foot_L_angle > -FOOT_EXPECTED_ANGLE and foot_L_angle < FOOT_EXPECTED_ANGLE and tibia_R_angle < TIBIA_EXPECTED_ANGLE:
+            if (foot_L_angle < FOOT_EPSILON or foot_L_angle > 180 - FOOT_EPSILON) and (tibia_R_angle < TIBIA_EPSILON or tibia_R_angle > 180 - TIBIA_EPSILON):
                 frame_list.append(frame)
 
     return frame_list
@@ -61,7 +61,8 @@ def torso_lean(data: list, show_all: bool) -> dict:
     MAX_REGULAR = 10  # maximum value of good torso lean
     degree_dict = {}
     for frame in data:
-        torso_angle = utils.angle_2points(frame["Neck"], frame["MidHip"])+90
+        torso_angle = abs(utils.angle_2points(
+            frame["Neck"], frame["MidHip"])+90)
         if show_all and torso_angle < FILTER:
             degree_dict[frame["ID"]] = torso_angle
         elif torso_angle < FILTER and (torso_angle < MIN_REGULAR or torso_angle > MAX_REGULAR):

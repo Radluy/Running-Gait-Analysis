@@ -81,7 +81,7 @@ bin\OpenPoseDemo.exe --video examples/media/video.avi
 
 --display 0
 
-> bin\OpenPoseDemo.exe --video .\my_data\traintracks_data\front1.mp4 --write_json .\outputs\traintrack\front1_json\ --write_video .\outputs\traintrack\front1_est.avi --number_people_max 1 --display 0
+> bin\OpenPoseDemo.exe --video .\my_data\traintracks_data\front1.mp4 --write_json .\outputs\traintrack\front1_json\ --write_video .\outputs\traintrack\front1_est.avi --write_images .\outputs\traintrack\front1_images\ --number_people_max 1 --display 0
 
 ## JSON
 
@@ -155,6 +155,7 @@ https://github.com/CMU-Perceptual-Computing-Lab/openpose/blob/master/doc/advance
 9. legs/arms X pattern
 10. ears aligned with shoulders
 
-let stance detector create array of frames -> possible to pass to metrics methods
+stance detector -> chunk concurrent frames
+torso_lean -> find direction of movement
 
 
