@@ -155,7 +155,7 @@ https://github.com/CMU-Perceptual-Computing-Lab/openpose/blob/master/doc/advance
 9. legs/arms X pattern
 10. ears aligned with shoulders
 
-stance detector -> chunk concurrent frames
+
 torso_lean -> find direction of movement
 
 
