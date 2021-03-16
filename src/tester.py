@@ -1,4 +1,4 @@
-import json_load  as jl
+import json_load as jl
 import pprint
 import metrics_lib
 import sys
@@ -12,11 +12,11 @@ import sys
 #         }
 
 
-if __name__ == "__main__": 
+if __name__ == "__main__":
     data = jl.load_json(sys.argv[1])
     #frames = metrics_lib.elbow_angle(data, False)
     frames = metrics_lib.stance_detector(data)
     #elbows = metrics_lib.elbow_angle(frames, True)
     pp = pprint.PrettyPrinter(indent=4)
     pp.pprint(frames)
-    #pp.pprint(elbows)
+    # pp.pprint(elbows)

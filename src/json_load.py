@@ -12,12 +12,13 @@ from keypoint_class import Keypoint
 #          head:  x,y
 #         }
 
-keypoint_order = ["Nose","Neck","RShoulder","RElbow","RWrist","LShoulder",
-                  "LElbow","LWrist","MidHip","RHip","RKnee","RAnkle","LHip",
-                  "LKnee","LAnkle","REye","LEye","REar","LEar","LBigToe",
-                  "LSmallToe","LHeel","RBigToe","RSmallToe", "RHeel", "Background"]
+keypoint_order = ["Nose", "Neck", "RShoulder", "RElbow", "RWrist", "LShoulder",
+                  "LElbow", "LWrist", "MidHip", "RHip", "RKnee", "RAnkle", "LHip",
+                  "LKnee", "LAnkle", "REye", "LEye", "REar", "LEar", "LBigToe",
+                  "LSmallToe", "LHeel", "RBigToe", "RSmallToe", "RHeel", "Background"]
 
-def load_json(json_directory_path: str) -> list: 
+
+def load_json(json_directory_path: str) -> list:
     """ load json files from a directory and return as an array of dictionaries"""
     data = []
     files = os.listdir(json_directory_path)
@@ -47,14 +48,10 @@ def load_json(json_directory_path: str) -> list:
     return data
 
 
-if __name__ == "__main__": 
+if __name__ == "__main__":
     # load json data from arg1 path
     directory = sys.argv[1]
     pp = pprint.PrettyPrinter(indent=4)
     data = load_json(directory)
 
     pp.pprint(data)
-    
-
-
-    
