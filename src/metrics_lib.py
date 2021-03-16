@@ -19,16 +19,29 @@ def stance_detector(data: list) -> list:
     Returns:
         list: array of frames with stance phase detected
     """
-    EPSILON = 8
+    FOOT_EXPECTED_ANGLE = 10
+    TIBIA_EXPECTED_ANGLE = 10
     frame_list = []
+    keypoints = ["RBigToe", "RHeel", "LBigToe",
+                 "LHeel", "RKnee", "RAnkle", "LKnee", "LAnkle"]
 
     for frame in data:
-        R_angle = abs(utils.angle_2points(frame["RBigToe"], frame["RHeel"]))
-        L_angle = abs(utils.angle_2points(frame["LBigToe"], frame["LHeel"]))
-        if (R_angle > -EPSILON and R_angle < EPSILON):
-            frame_list.append(frame)
-        if (L_angle > -EPSILON and L_angle < EPSILON):
-            frame_list.append(frame)
+        for keypoint in keypoints:
+            if frame[keypoint].confidence == 0:
+                break
+        else:
+            foot_R_angle = abs(utils.angle_2points(
+                frame["RBigToe"], frame["RHeel"]))
+            foot_L_angle = abs(utils.angle_2points(
+                frame["LBigToe"], frame["LHeel"]))
+            tibia_R_angle = abs(utils.angle_2points(
+                frame["RKnee"], frame["RAnkle"]))
+            tibia_L_angle = abs(utils.angle_2points(
+                frame["LKnee"], frame["LAnkle"]))
+            if foot_R_angle > -FOOT_EXPECTED_ANGLE and foot_R_angle < FOOT_EXPECTED_ANGLE and tibia_L_angle < TIBIA_EXPECTED_ANGLE:
+                frame_list.append(frame)
+            if foot_L_angle > -FOOT_EXPECTED_ANGLE and foot_L_angle < FOOT_EXPECTED_ANGLE and tibia_R_angle < TIBIA_EXPECTED_ANGLE:
+                frame_list.append(frame)
 
     return frame_list
 
