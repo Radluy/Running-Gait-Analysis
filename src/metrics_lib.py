@@ -25,12 +25,15 @@ def torso_lean(data: list, show_all: bool) -> dict:
     MIN_REGULAR = 2  # minimal value of good torso lean
     MAX_REGULAR = 10  # maximum value of good torso lean
     degree_dict = {}
+    right_direction = utils.is_going_right(data)
     for frame in data:
-        torso_angle = abs(utils.angle_2points(
-            frame["Neck"], frame["MidHip"])+90)
+        torso_angle = utils.angle_2points(
+            frame["Neck"], frame["MidHip"])+90
         if show_all and torso_angle < FILTER:
             degree_dict[frame["ID"]] = torso_angle
-        elif torso_angle < FILTER and (torso_angle < MIN_REGULAR or torso_angle > MAX_REGULAR):
+        elif right_direction and torso_angle < FILTER and (torso_angle < MIN_REGULAR or torso_angle > MAX_REGULAR):
+            degree_dict[frame["ID"]] = torso_angle
+        elif (not right_direction) and torso_angle < FILTER and (torso_angle > -MIN_REGULAR or torso_angle < -MAX_REGULAR):
             degree_dict[frame["ID"]] = torso_angle
 
     return degree_dict
