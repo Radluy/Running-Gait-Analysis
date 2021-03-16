@@ -38,3 +38,23 @@ def angle_3points(k1: Keypoint, k2: Keypoint, k3: Keypoint) -> float:
     cosine_angle = np.dot(ba, bc) / (np.linalg.norm(ba) * np.linalg.norm(bc))
     radian_angle = np.arccos(cosine_angle)
     return np.degrees(radian_angle)
+
+
+def is_going_right(data: list) -> bool:
+    """Decide wich way the runner is going
+
+    Args:
+        data (list): data structure of keypoint positions from pose estimator
+
+    Returns:
+        bool: True if the runner is going fro left to right, False otherwise
+    """
+    number = int(len(data) / 2)
+    pos1 = data[number]["MidHip"].x
+    pos2 = data[number+1]["MidHip"].x
+    if pos1 < pos2:
+        return True
+    else:
+        return False
+
+
