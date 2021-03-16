@@ -10,7 +10,28 @@ import utils
 #          head:  x,y
 #         }
 
-def stance_detector(data: list) -> list:
+def create_frame_chunks(frame_list: list) -> list:
+    """Merges concurrent frames into chunks
+
+    Args:
+        frame_list (list): list of frames to be merged
+
+    Returns:
+        list: list of chunks, one chunk is array of frames
+    """
+    tmp_frame = frame_list[0]
+    chunk_list = [[tmp_frame]]
+
+    for frame in frame_list[1:]:
+        if frame["ID"] == tmp_frame["ID"]+1:
+            chunk_list[-1].append(frame)
+        else:
+            chunk_list.append([frame])
+        tmp_frame = frame
+
+    return chunk_list
+
+def stance_detector(data: list, merge_to_chunks: bool) -> list:
     """Finds frames with runner in a stance phase
 
     Args:
@@ -42,6 +63,10 @@ def stance_detector(data: list) -> list:
                 frame_list.append(frame)
             if (foot_L_angle < FOOT_EPSILON or foot_L_angle > 180 - FOOT_EPSILON) and (tibia_R_angle < TIBIA_EPSILON or tibia_R_angle > 180 - TIBIA_EPSILON):
                 frame_list.append(frame)
+
+    if merge_to_chunks:
+        chunks = create_frame_chunks(frame_list)
+        return chunks
 
     return frame_list
 
