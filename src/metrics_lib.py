@@ -1,6 +1,7 @@
 import sys
 import utils
 import operator
+import stance_detector as sd
 
 
 # data = [frame1, frame2, ..., frame n]
@@ -127,6 +128,40 @@ def knee_flexion(chunks: list, show_all: bool) -> dict:
         elif angles[max_angle_id] < MIN_VAL:
             angle_dict[max_angle_id] = angles[max_angle_id]
     return angle_dict
+
+
+def tibia_angle(data: list, show_all: bool) -> dict:
+    """Calculate angle of stance leg tibia during stance phase
+
+    Args:
+        data (list): data structure of keypoint positions from pose estimator
+        show_all (bool): whether to return values for each stance or only irregular ones
+
+    Returns:
+        dict: dictionary of frame IDs and stance leg tibia angles 
+    """
+    right_direction = utils.is_going_right(data)
+    # chunks = sd.create_frame_chunks(data)
+    angle_dict = {}
+    for frame in data:
+        if right_direction:
+            if frame["StanceLeg"] == "Right":
+                angle = utils.angle_2points(frame["RAnkle"], frame["RKnee"])
+            else:
+                angle = utils.angle_2points(frame["LAnkle"], frame["LKnee"])
+        else:
+            if frame["StanceLeg"] == "Right":
+                angle = utils.angle_2points(frame["RAnkle"], frame["RKnee"])
+            else:
+                angle = utils.angle_2points(frame["LAnkle"], frame["LKnee"])
+        if show_all:
+            angle_dict[frame["ID"]] = angle
+        elif right_direction and angle < 90:
+            angle_dict[frame["ID"]] = angle
+        elif not right_direction and angle > 90:
+            angle_dict[frame["ID"]] = angle
+    return angle_dict
+
 
 
 if __name__ == "__main__":
