@@ -41,13 +41,13 @@ def angle_3points(k1: Keypoint, k2: Keypoint, k3: Keypoint) -> float:
 
 
 def is_going_right(data: list) -> bool:
-    """Decide wich way the runner is going
+    """Determine which way the runner is going
 
     Args:
         data (list): data structure of keypoint positions from pose estimator
 
     Returns:
-        bool: True if the runner is going fro left to right, False otherwise
+        bool: True if the runner is going from left to right, False otherwise
     """
     number = int(len(data) / 2)
     pos1 = data[number]["MidHip"].x
