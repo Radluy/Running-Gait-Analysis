@@ -1,6 +1,7 @@
 import utils
 
 
+# [[1,2,3], [6,7,8], [15,16]...]
 def create_frame_chunks(frame_list: list) -> list:
     """Merges concurrent frames into chunks
 
@@ -51,8 +52,10 @@ def stance_detector(data: list, merge_to_chunks: bool) -> list:
             tibia_L_angle = abs(utils.angle_2points(
                 frame["LKnee"], frame["LAnkle"]))
             if (foot_R_angle < FOOT_EPSILON or foot_R_angle > 180 - FOOT_EPSILON) and (tibia_L_angle < TIBIA_EPSILON or tibia_L_angle > 180 - TIBIA_EPSILON):
+                frame["StanceLeg"] = "Right"
                 frame_list.append(frame)
             if (foot_L_angle < FOOT_EPSILON or foot_L_angle > 180 - FOOT_EPSILON) and (tibia_R_angle < TIBIA_EPSILON or tibia_R_angle > 180 - TIBIA_EPSILON):
+                frame["StanceLeg"] = "Left"
                 frame_list.append(frame)
 
     if merge_to_chunks:
