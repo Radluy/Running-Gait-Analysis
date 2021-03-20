@@ -144,9 +144,9 @@ https://github.com/CMU-Perceptual-Computing-Lab/openpose/blob/master/doc/advance
 
 ## Metrics
 
-1. feet strikes -> big angle bad
+1. feet strikes -> big angle bad [DONE] (add heel/forefoot/midfoot identificator)
 2. pronation -> heel - ankle angle, big bad, 0 good
-3. shin/tibia angle -> extented bad(ankle in front of knee), vertical or flexed good  
+3. shin/tibia angle -> extented bad(ankle in front of knee), vertical or flexed good  [DONE]
 4. knee flexion -> stance phase, ~45 ideal, less bad(find maximum) [DONE]
 5. hip extension -> late stance(odraz) not sure, <10 prolly bad
 6. torso lean forward (~7) [DONE]

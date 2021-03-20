@@ -163,6 +163,39 @@ def tibia_angle(data: list, show_all: bool) -> dict:
     return angle_dict
 
 
+def feet_strike(data: list, show_all: bool) -> dict:
+    """Calculate feet strike angle
+
+    Args:
+        data (list): data structure of keypoint positions from pose estimator
+        show_all (bool): whether to return values for each stance or only irregular ones
+
+    Returns:
+        dict: dictionary of frame IDs and feet strike angles
+    """
+    MAX_ANGLE = 20
+    chunks = sd.stance_detector(data, True)
+    right_direction = utils.is_going_right(data)
+    angle_dict = {}
+    for chunk in chunks:
+        pre_chunk_id = chunk[0]["ID"] - 1
+        pre_frame = None
+        for frame in data:
+            if frame["ID"] == pre_chunk_id:
+                pre_frame = frame
+                break
+        if chunk[0]["StanceLeg"] == "Right":
+            angle = abs(utils.angle_2points(pre_frame["RBigToe"], pre_frame["RHeel"]))
+        else:
+            angle = abs(utils.angle_2points(pre_frame["LBigToe"], pre_frame["LHeel"]))
+        if not right_direction:
+            angle = 180 - angle
+        if show_all:
+            angle_dict[pre_chunk_id] = angle
+        elif angle > MAX_ANGLE:
+            angle_dict[pre_chunk_id] = angle
+    return angle_dict
+
 
 if __name__ == "__main__":
     pass
