@@ -2,6 +2,7 @@ import sys
 import utils
 import operator
 import stance_detector as sd
+import keypoint_class
 
 
 # data = [frame1, frame2, ..., frame n]
@@ -97,11 +98,11 @@ def CoM_displacement(data: list, show_all: bool) -> dict:
     return degree_dict
 
 
-def knee_flexion(chunks: list, show_all: bool) -> dict:
+def knee_flexion(data: list, show_all: bool) -> dict:
     """Calculate maximum angle of knee flexion during stance phase
 
     Args:
-        chunks (list): list of chunks with individual stances from stance detector
+        data (list): data structure of keypoint positions from pose estimator
         show_all (bool): whether to return values for each stance or only irregular ones
 
     Returns:
@@ -109,6 +110,7 @@ def knee_flexion(chunks: list, show_all: bool) -> dict:
     """
     MIN_VAL = 40
     angle_dict = {}
+    chunks = sd.stance_detector(data, True)
     for chunk in chunks:
         angles = {}
         for frame in chunk:
@@ -194,6 +196,50 @@ def feet_strike(data: list, show_all: bool) -> dict:
             angle_dict[pre_chunk_id] = angle
         elif angle > MAX_ANGLE:
             angle_dict[pre_chunk_id] = angle
+    return angle_dict
+
+
+def hip_extension(data: list, show_all: bool) -> dict:
+    # biggest knee angle after stance -> stops growing
+    chunks = sd.stance_detector(data, True)
+    angle_dict = {}
+    MIN_VAL = 10
+
+    for chunk in chunks:
+        post_chunk_id = chunk[0]["ID"] + 1
+        post_frame = None
+        list_pos = 0
+        for frame in data:
+            if frame["ID"] == post_chunk_id: # after stance
+                break
+            list_pos += 1
+
+        tmp_angles = {}
+        knee_dict = {}
+        for pos in range(list_pos,list_pos+5): # 5 frames after stance
+            frame = data[pos]
+            if chunk[0]["StanceLeg"] == "Right":
+                # DEBUG
+                knee_angle = utils.angle_3points(frame["RAnkle"], frame["RKnee"], frame["RHip"])
+                knee_dict[frame["ID"]] = knee_angle
+                # DEBUG
+                tmp_keypoint = keypoint_class.Keypoint(frame["RHip"].x, frame["RHip"].y-10, 1)
+                angle = utils.angle_3points(frame["RKnee"], frame["RHip"], tmp_keypoint)
+            else:
+                # DEBUG
+                knee_angle = utils.angle_3points(frame["LAnkle"], frame["LKnee"], frame["LHip"])
+                knee_dict[frame["ID"]] = knee_angle
+                # DEBUG
+                tmp_keypoint = keypoint_class.Keypoint(frame["LHip"].x, frame["LHip"].y-10, 1)
+                angle = utils.angle_3points(frame["LKnee"], frame["LHip"], tmp_keypoint)
+            angle = 180 - angle
+            tmp_angles[frame["ID"]] = angle
+
+        max_angle_id = max(knee_dict.items(), key=operator.itemgetter(1))[0]
+        if show_all:
+            angle_dict[max_angle_id] = tmp_angles[max_angle_id]
+        elif tmp_angles[max_angle_id] < 10:
+            angle_dict[max_angle_id] = tmp_angles[max_angle_id]
     return angle_dict
 
 

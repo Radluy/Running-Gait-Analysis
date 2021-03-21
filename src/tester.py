@@ -17,6 +17,6 @@ import stance_detector as sd
 if __name__ == "__main__":
     data = jl.load_json(sys.argv[1])
     frames = sd.stance_detector(data, False)
-    elbows = metrics_lib.feet_strike(data, True)
+    elbows = metrics_lib.hip_extension(data, False)
     pp = pprint.PrettyPrinter(indent=4)
     pp.pprint(elbows)
