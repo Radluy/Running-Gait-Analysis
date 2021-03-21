@@ -200,6 +200,15 @@ def feet_strike(data: list, show_all: bool) -> dict:
 
 
 def hip_extension(data: list, show_all: bool) -> dict:
+    """Calculate hip extension angle at the end of stance phase
+
+    Args:
+        data (list): data structure of keypoint positions from pose estimator
+        show_all (bool): whether to return values for each stance or only irregular ones
+
+    Returns:
+        dict: dictionary of frame IDs and hip extension angles
+    """
     # biggest knee angle after stance -> stops growing
     chunks = sd.stance_detector(data, True)
     angle_dict = {}
@@ -219,17 +228,15 @@ def hip_extension(data: list, show_all: bool) -> dict:
         for pos in range(list_pos,list_pos+5): # 5 frames after stance
             frame = data[pos]
             if chunk[0]["StanceLeg"] == "Right":
-                # DEBUG
                 knee_angle = utils.angle_3points(frame["RAnkle"], frame["RKnee"], frame["RHip"])
                 knee_dict[frame["ID"]] = knee_angle
-                # DEBUG
+
                 tmp_keypoint = keypoint_class.Keypoint(frame["RHip"].x, frame["RHip"].y-10, 1)
                 angle = utils.angle_3points(frame["RKnee"], frame["RHip"], tmp_keypoint)
             else:
-                # DEBUG
                 knee_angle = utils.angle_3points(frame["LAnkle"], frame["LKnee"], frame["LHip"])
                 knee_dict[frame["ID"]] = knee_angle
-                # DEBUG
+
                 tmp_keypoint = keypoint_class.Keypoint(frame["LHip"].x, frame["LHip"].y-10, 1)
                 angle = utils.angle_3points(frame["LKnee"], frame["LHip"], tmp_keypoint)
             angle = 180 - angle
