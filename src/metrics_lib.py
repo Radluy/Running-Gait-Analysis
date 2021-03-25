@@ -37,7 +37,7 @@ def torso_lean(data: list, show_all: bool) -> dict:
         elif right_direction and torso_angle < FILTER and (torso_angle < MIN_REGULAR or torso_angle > MAX_REGULAR):
             degree_dict[frame["ID"]] = torso_angle
         elif (not right_direction) and torso_angle < FILTER and (torso_angle > -MIN_REGULAR or torso_angle < -MAX_REGULAR):
-            degree_dict[frame["ID"]] = torso_angle
+            degree_dict[frame["ID"]] = -torso_angle
 
     return degree_dict
 
@@ -143,9 +143,9 @@ def tibia_angle(data: list, show_all: bool) -> dict:
         dict: dictionary of frame IDs and stance leg tibia angles 
     """
     right_direction = utils.is_going_right(data)
-    # chunks = sd.create_frame_chunks(data)
+    stances = sd.stance_detector(data, False)
     angle_dict = {}
-    for frame in data:
+    for frame in stances:
         if right_direction:
             if frame["StanceLeg"] == "Right":
                 angle = utils.angle_2points(frame["RAnkle"], frame["RKnee"])

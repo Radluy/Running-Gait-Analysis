@@ -131,11 +131,6 @@ body_keypoints_3d, face_keypoints_3d, hand_left_keypoints_2d, and hand_right_key
 
 https://github.com/CMU-Perceptual-Computing-Lab/openpose/blob/master/doc/advanced/heatmap_output.md
 
-# My ideas
-
-1. load json files into structure [DONE]
-2. figure out important positions in gait cycle
-
 ## GUI
 1. import 1 or 2 videos
 2. visualize
@@ -143,7 +138,6 @@ https://github.com/CMU-Perceptual-Computing-Lab/openpose/blob/master/doc/advance
 4. save to file
 
 ## Metrics
-
 1. feet strikes -> big angle bad [DONE] (add heel/forefoot/midfoot identificator)
 2. pronation -> heel - ankle angle, big bad, 0 good
 3. shin/tibia angle -> extented bad(ankle in front of knee), vertical or flexed good  [DONE]
@@ -155,4 +149,9 @@ https://github.com/CMU-Perceptual-Computing-Lab/openpose/blob/master/doc/advance
 9. legs/arms X pattern
 10. ears aligned with shoulders
 
+## Consultation
+1. front -> back camera
+2. synchronization
+3. GUI mockup
 
+trajectory
