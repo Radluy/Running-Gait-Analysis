@@ -6,8 +6,14 @@ from PIL import Image
 from PIL import ImageOps
 
 
-def create_keypoint_trajectory(data: list, joint: str, image_path: str):
+def plot_keypoint_trajectory(data: list, joint: str, image_path: str):
+    """plot trajectory of one keypoint from pose estimator
 
+    Args:
+        data (list): data structure from pose estimator
+        joint (str): name of the studied keypoint
+        image_path (str): path to one image from pose estimator used to determine dimensions
+    """
     image = Image.open(image_path)
     width, height = image.size
 
@@ -18,7 +24,7 @@ def create_keypoint_trajectory(data: list, joint: str, image_path: str):
             keypoint = frame[joint]
         except KeyError:
             print("Incorrect keypoint name")
-            return 
+            return
 
         if keypoint.confidence != 0:
             x_dims.append(keypoint.x)
@@ -35,9 +41,9 @@ def create_keypoint_trajectory(data: list, joint: str, image_path: str):
 
     plt.show()
     fig.tight_layout()
-    # fig.savefig('{}_trajectory.png'.format(joint), dpi=200) 
+    # fig.savefig('{}_trajectory.png'.format(joint), dpi=200)
 
 
 if __name__ == "__main__":
     data = jl.load_json(sys.argv[1])
-    create_keypoint_trajectory(data, "RKnee", sys.argv[2])
+    plot_keypoint_trajectory(data, "RKnee", sys.argv[2])
