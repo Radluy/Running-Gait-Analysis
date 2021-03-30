@@ -16,10 +16,9 @@ import stance_detector as sd
 
 if __name__ == "__main__":
     data = jl.load_json(sys.argv[1])
+    back_data = jl.load_json(sys.argv[2])
     frames = sd.stance_detector(data, False)
-    #torso = metrics_lib.torso_lean(data, False)
     pp = pprint.PrettyPrinter(indent=4)
-    #pp.pprint(torso)
 
     print("Stances:")
     ids = []
@@ -27,20 +26,23 @@ if __name__ == "__main__":
         ids.append(frame["ID"])
     pp.pprint(ids)
 
-    print("Torso lean:")
+    print("\nTorso lean:")
     pp.pprint(metrics_lib.torso_lean(frames, False))
 
-    print("Knee flexion:")
+    print("\nKnee flexion:")
     pp.pprint(metrics_lib.knee_flexion(data, False))
 
-    print("Tibia angle:")
+    print("\nTibia angle:")
     pp.pprint(metrics_lib.tibia_angle(data, False))
 
-    print("Center of mass displacement:")
+    print("\nCenter of mass displacement:")
     pp.pprint(metrics_lib.CoM_displacement(data, False))
 
-    print("Elbow angle:")
+    print("\nElbow angle:")
     pp.pprint(metrics_lib.elbow_angle(frames, False))
 
-    print("Hip extension:")
+    print("\nHip extension:")
     pp.pprint(metrics_lib.hip_extension(data, False))
+
+    print("\nPelvic drop:")
+    pp.pprint(metrics_lib.pelvic_drop(back_data, False))

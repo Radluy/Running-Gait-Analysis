@@ -250,5 +250,29 @@ def hip_extension(data: list, show_all: bool) -> dict:
     return angle_dict
 
 
+def pelvic_drop(data: list, show_all: bool) -> dict:
+    """Calculate angle of pelvic drop from back view
+
+    Args:
+        data (list): data structure of keypoint positions from pose estimator
+        show_all (bool): whether to return values for each stance or only irregular ones
+
+    Returns:
+        dict: dictionary of frame IDs and pelvic drop angles
+    """
+    FILTER = 80
+    MAX_ANGLE = 7
+    angle_dict = {}
+    for frame in data:
+        angle = utils.angle_2points(frame["RHip"], frame["LHip"])
+        angle = abs(angle)
+        if show_all and angle < FILTER:
+            angle_dict[frame["ID"]] = angle
+        elif angle > MAX_ANGLE and angle < FILTER:
+            angle_dict[frame["ID"]] = angle
+    
+    return angle_dict
+
+
 if __name__ == "__main__":
     pass
