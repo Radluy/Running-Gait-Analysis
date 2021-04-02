@@ -154,4 +154,10 @@ https://github.com/CMU-Perceptual-Computing-Lab/openpose/blob/master/doc/advance
 2. synchronization
 3. GUI mockup
 
+## QT Designer
+> /mnt/c/Users/rados/Documents/BP-repo/env/lib/python3.8/site-packages/qt5_applications/Qt/bin/designer
+
 trajectory
+openpose accuracy testing -> stickers
+
+
