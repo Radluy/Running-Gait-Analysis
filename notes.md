@@ -163,4 +163,6 @@ trajectory
 
 openpose accuracy testing -> stickers
 
+gui -> choose folder -> check structure = image folder/ json folder/ files
+
 
