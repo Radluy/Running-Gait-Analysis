@@ -34,7 +34,6 @@ def load_folder_struct(path):
     if not correct_struct:
         return
     struct = folderStruct(path)
-    print(struct)
     return struct
 
 
@@ -43,7 +42,7 @@ def call_estimator(path_to_video):
     pass
 
 
-def backend_setup(path1, path2):
+def backend_setup(path1):
     isVideo = False
     if os.path.isdir(path1):
         return load_folder_struct(path1)

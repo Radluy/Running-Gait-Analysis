@@ -166,3 +166,5 @@ openpose accuracy testing -> stickers
 gui -> choose folder -> check structure = image folder/ json folder/ files
 
 
+window drag and drop -> move to slider functionality
+
