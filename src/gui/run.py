@@ -1,10 +1,12 @@
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 import qdarkstyle
+import controller
 
 
 qtCreatorFile = "src/gui/run_analysis.ui"
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
+SIDE_FILE_STRUCT = None
 
 
 class SideView(QtWidgets.QWidget):
@@ -33,6 +35,8 @@ class SideView(QtWidgets.QWidget):
     def dropEvent(self, event):
         if event.mimeData().hasUrls:
             self.video_url = event.mimeData().text()
+            SIDE_FILE_STRUCT = controller.backend_setup(self.video_url, "") #DEBUG
+            print("C")
         else:
             event.ignore()
 
