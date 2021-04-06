@@ -206,6 +206,9 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         items = (self.radioLayout.itemAt(i).widget() for i in range(self.radioLayout.count())) 
         for radioButton in items:
             radioButton.clicked.connect(self.writeDescription)
+            policy = QtWidgets.QSizePolicy()
+            policy.setRetainSizeWhenHidden(True)
+            radioButton.setSizePolicy(policy)
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
