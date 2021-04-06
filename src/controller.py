@@ -1,9 +1,9 @@
-from pymediainfo import MediaInfo
 import sys 
 import filetype
 import os
 from folderClass import folderStruct
-import pprint
+import metrics_lib
+import stance_detector as sd
 
 
 def check_formal_reqs(path: str) -> bool:
@@ -42,6 +42,26 @@ def call_estimator(path_to_video):
     pass
 
 
+def evaluate(side_data, back_data):
+    frames = sd.stance_detector(side_data, False)
+    metric_values = {}
+    ids = []
+    for frame in frames:
+        ids.append(frame["ID"])
+    metric_values["Stances"] = ids
+
+    metric_values["Torso Lean"] = metrics_lib.torso_lean(frames, False)
+    metric_values["Knee Flexion"] = metrics_lib.knee_flexion(side_data, False)
+    metric_values["Tibia Angle"] = metrics_lib.tibia_angle(side_data, False)
+    metric_values["Center of Mass Displacement"] = metrics_lib.CoM_displacement(side_data, False)
+    metric_values["Elbow Angle"] = metrics_lib.elbow_angle(frames, False)
+    metric_values["Hip Extension"] = metrics_lib.hip_extension(side_data, False)
+    metric_values["Pelvic Drop"] = metrics_lib.pelvic_drop(back_data, False)
+    metric_values["Feet Strike"] = metrics_lib.feet_strike(side_data, False)
+
+    return metric_values
+
+
 def backend_setup(path1):
     isVideo = False
     if os.path.isdir(path1):
@@ -52,6 +72,5 @@ def backend_setup(path1):
         #TODO: INCORRECT PATH
         return
     if kind.mime[0:5] == "video":
-        print("ISVIDEO")
         new_path = call_estimator(path1)
         return load_folder_struct(new_path)
