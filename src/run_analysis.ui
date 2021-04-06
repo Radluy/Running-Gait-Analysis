@@ -44,7 +44,7 @@
   <widget class="QLabel" name="sideLabel">
    <property name="geometry">
     <rect>
-     <x>220</x>
+     <x>200</x>
      <y>370</y>
      <width>251</width>
      <height>31</height>
@@ -62,7 +62,7 @@
   <widget class="QLabel" name="backLabel">
    <property name="geometry">
     <rect>
-     <x>880</x>
+     <x>860</x>
      <y>370</y>
      <width>261</width>
      <height>31</height>
@@ -111,6 +111,12 @@
      <width>121</width>
      <height>21</height>
     </rect>
+   </property>
+   <property name="currentText">
+    <string>Torso Lean</string>
+   </property>
+   <property name="placeholderText">
+    <string>Empty</string>
    </property>
    <item>
     <property name="text">
@@ -281,6 +287,19 @@ p, li { white-space: pre-wrap; }
      </widget>
     </item>
    </layout>
+  </widget>
+  <widget class="QCheckBox" name="checkBox">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>390</y>
+     <width>121</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Synchronize</string>
+   </property>
   </widget>
  </widget>
  <resources/>

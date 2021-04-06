@@ -50,14 +50,17 @@ def evaluate(side_data, back_data):
         ids.append(frame["ID"])
     metric_values["Stances"] = ids
 
-    metric_values["Torso Lean"] = metrics_lib.torso_lean(frames, False)
-    metric_values["Knee Flexion"] = metrics_lib.knee_flexion(side_data, False)
-    metric_values["Tibia Angle"] = metrics_lib.tibia_angle(side_data, False)
-    metric_values["Center of Mass Displacement"] = metrics_lib.CoM_displacement(side_data, False)
-    metric_values["Elbow Angle"] = metrics_lib.elbow_angle(frames, False)
-    metric_values["Hip Extension"] = metrics_lib.hip_extension(side_data, False)
-    metric_values["Pelvic Drop"] = metrics_lib.pelvic_drop(back_data, False)
-    metric_values["Feet Strike"] = metrics_lib.feet_strike(side_data, False)
+    try:
+        metric_values["Torso Lean"] = metrics_lib.torso_lean(frames, False)
+        metric_values["Knee Flexion"] = metrics_lib.knee_flexion(side_data, False)
+        metric_values["Tibia Angle"] = metrics_lib.tibia_angle(side_data, False)
+        metric_values["Center of Mass Displacement"] = metrics_lib.CoM_displacement(side_data, False)
+        metric_values["Elbow Angle"] = metrics_lib.elbow_angle(frames, False)
+        metric_values["Hip Extension"] = metrics_lib.hip_extension(side_data, False)
+        metric_values["Feet Strike"] = metrics_lib.feet_strike(side_data, False)
+        metric_values["Pelvic Drop"] = metrics_lib.pelvic_drop(back_data, False)
+    except:
+        pass
 
     return metric_values
 
