@@ -86,6 +86,8 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             return
         pixmap = pixmap.scaled(640, 360)
         self.sideView.sideViewLabel.setPixmap(pixmap)
+        frame_id = SIDE_FILE_STRUCT.data[self.sideViewSlider.value()]["ID"]
+        self.sideLabel.setText("SIDE VIEW - FRAME: {}".format(frame_id))
 
     def setBackSliderLength(self):
         global BACK_FILE_STRUCT
@@ -102,6 +104,8 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             return
         pixmap = pixmap.scaled(640, 360)
         self.backView.backViewLabel.setPixmap(pixmap)
+        frame_id = BACK_FILE_STRUCT.data[self.backViewSlider.value()]["ID"]
+        self.backLabel.setText("BACK VIEW - FRAME: {}".format(frame_id))
 
     def loadData(self):
         global SIDE_FILE_STRUCT
@@ -109,8 +113,44 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         try:
             SIDE_FILE_STRUCT = controller.backend_setup(self.sideView.video_url)
             BACK_FILE_STRUCT = controller.backend_setup(self.backView.video_url)
+            SIDE_FILE_STRUCT.metric_values = controller.evaluate(SIDE_FILE_STRUCT.data, BACK_FILE_STRUCT.data)
         except:
             pass
+
+    def hideRadioButtons(self):
+        items = (self.radioLayout.itemAt(i).widget() for i in range(self.radioLayout.count())) 
+        for radioButton in items:
+            radioButton.hide()
+    
+    def chosenMetric(self):
+        global SIDE_FILE_STRUCT
+        global BACK_FILE_STRUCT
+
+        if SIDE_FILE_STRUCT is None:
+            return
+
+        chosen_metric = self.metricSelectComboBox.currentText()
+        # create radiobox array 
+        self.hideRadioButtons()
+        i = 0
+        vals = SIDE_FILE_STRUCT.metric_values[chosen_metric]
+        for val in vals.keys():
+            try:
+                radioButton = self.radioLayout.itemAt(i).widget()
+            except:
+                return
+            radioButton.setText("Frame: {}".format(val))
+            radioButton.show()
+            i += 1
+
+    def writeDescription(self, radioButton):
+        items = (self.radioLayout.itemAt(i).widget() for i in range(self.radioLayout.count())) 
+        for radioButton in items:
+            if radioButton.isChecked():
+                ID = radioButton.text()[7:]
+        global SIDE_FILE_STRUCT
+        angle = SIDE_FILE_STRUCT.metric_values[self.metricSelectComboBox.currentText()][int(ID)]
+        self.metricDescriptionText.setText("Angle = {}".format(angle))
 
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
@@ -126,6 +166,11 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.processButton.clicked.connect(self.setBackSliderLength)
         self.setBackSliderLength()
         self.backViewSlider.valueChanged.connect(self.setBackViewImage)
+        self.metricSelectComboBox.activated.connect(self.chosenMetric)
+        self.hideRadioButtons()
+        items = (self.radioLayout.itemAt(i).widget() for i in range(self.radioLayout.count())) 
+        for radioButton in items:
+            radioButton.clicked.connect(self.writeDescription)
 
 
 if __name__ == "__main__":

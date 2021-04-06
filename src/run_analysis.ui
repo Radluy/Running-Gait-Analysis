@@ -41,12 +41,12 @@
     <string>Process</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="sideLabel">
    <property name="geometry">
     <rect>
-     <x>260</x>
+     <x>220</x>
      <y>370</y>
-     <width>121</width>
+     <width>251</width>
      <height>31</height>
     </rect>
    </property>
@@ -56,15 +56,15 @@
     </font>
    </property>
    <property name="text">
-    <string>SIDE VIEW</string>
+    <string>SIDE VIEW - FRAME: </string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_2">
+  <widget class="QLabel" name="backLabel">
    <property name="geometry">
     <rect>
-     <x>920</x>
+     <x>880</x>
      <y>370</y>
-     <width>131</width>
+     <width>261</width>
      <height>31</height>
     </rect>
    </property>
@@ -74,7 +74,7 @@
     </font>
    </property>
    <property name="text">
-    <string>BACK VIEW</string>
+    <string>BACK VIEW - FRAME:</string>
    </property>
   </widget>
   <widget class="QSlider" name="backViewSlider">
@@ -182,6 +182,105 @@ p, li { white-space: pre-wrap; }
    <property name="text">
     <string>Metric select</string>
    </property>
+  </widget>
+  <widget class="QWidget" name="gridLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>450</y>
+     <width>281</width>
+     <height>212</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="radioLayout">
+    <item row="4" column="0">
+     <widget class="QRadioButton" name="radioButton_3">
+      <property name="text">
+       <string>RadioButton</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QRadioButton" name="radioButton_2">
+      <property name="text">
+       <string>RadioButton</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QRadioButton" name="radioButton">
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="text">
+       <string>RadioButton</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0">
+     <widget class="QRadioButton" name="radioButton_4">
+      <property name="text">
+       <string>RadioButton</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0">
+     <widget class="QRadioButton" name="radioButton_5">
+      <property name="text">
+       <string>RadioButton</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QRadioButton" name="radioButton_7">
+      <property name="text">
+       <string>RadioButton</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QRadioButton" name="radioButton_8">
+      <property name="text">
+       <string>RadioButton</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QRadioButton" name="radioButton_9">
+      <property name="text">
+       <string>RadioButton</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1">
+     <widget class="QRadioButton" name="radioButton_10">
+      <property name="text">
+       <string>RadioButton</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="1">
+     <widget class="QRadioButton" name="radioButton_11">
+      <property name="text">
+       <string>RadioButton</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="1">
+     <widget class="QRadioButton" name="radioButton_12">
+      <property name="text">
+       <string>RadioButton</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="0">
+     <widget class="QRadioButton" name="radioButton_6">
+      <property name="text">
+       <string>RadioButton</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>

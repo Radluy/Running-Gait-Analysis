@@ -4,6 +4,8 @@ import json_load as jl
 class folderStruct():
 
     def __init__(self, path: str):
+        self.metric_values = None
+
         json_dir = os.path.join(path, "json")
         self.data = jl.load_json(json_dir)
 
