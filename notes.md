@@ -157,11 +157,19 @@ https://github.com/CMU-Perceptual-Computing-Lab/openpose/blob/master/doc/advance
 ## QT Designer
 > /mnt/c/Users/rados/Documents/BP-repo/env/lib/python3.8/site-packages/qt5_applications/Qt/bin/designer
 
+## packages
+1. numpy
+2. pyqt5
+3. filetype
+4. qdarkstyle
 
-
-trajectory
 
 openpose accuracy testing -> stickers
 
 backview - crop last frames when turning
 
+synchronize - frame slider sync
+
+trajectory integration
+
+Metrics descriptions

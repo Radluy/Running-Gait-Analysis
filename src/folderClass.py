@@ -19,6 +19,7 @@ class folderStruct():
         cropped_image_list = image_list[first_frame:len(self.data)+first_frame]
         for file in cropped_image_list:
             self.images.append(os.path.join(image_dir,file))
+        self.images.sort()
 
         
         
