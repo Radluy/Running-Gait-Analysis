@@ -173,7 +173,7 @@
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;/mnt/c/Users/rados/Documents/BP/openpose/openpose/outputs/traintrack/123_side2_new/  /mnt/c/Users/rados/Documents/BP/openpose/openpose/outputs/sync/123_back_new&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt; &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_3">
@@ -363,14 +363,66 @@ p, li { white-space: pre-wrap; }
   <widget class="QCheckBox" name="checkBox">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>390</y>
+     <x>620</x>
+     <y>470</y>
      <width>121</width>
      <height>21</height>
     </rect>
    </property>
    <property name="text">
     <string>Synchronize</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="sideVideoUploadButton">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>370</y>
+     <width>111</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Upload Video</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="sideDataUploadButton">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>400</y>
+     <width>111</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Load saved data</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="backVideoUploadButton">
+   <property name="geometry">
+    <rect>
+     <x>1120</x>
+     <y>370</y>
+     <width>111</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Upload Video</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="backDataUploadButton">
+   <property name="geometry">
+    <rect>
+     <x>1120</x>
+     <y>400</y>
+     <width>111</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Load saved data</string>
    </property>
   </widget>
  </widget>

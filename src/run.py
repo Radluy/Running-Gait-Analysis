@@ -38,6 +38,20 @@ class SideView(QtWidgets.QWidget):
         else:
             event.ignore()
 
+    def uploadVideo(self, event):
+        opener = QtWidgets.QFileDialog()
+        opener.setFileMode(QtWidgets.QFileDialog.ExistingFile)
+        self.video_url, _ = opener.getOpenFileName(self, 
+        "Open video", QtCore.QDir.homePath())
+    
+    def uploadData(self, event):
+        opener = QtWidgets.QFileDialog()
+        opener.setFileMode(QtWidgets.QFileDialog.Directory)
+        self.video_url = str(opener.getExistingDirectory(self, "Select Directory"))
+        
+        
+
+
 class BackView(QtWidgets.QWidget):
 
     def __init__(self, parent=None):
@@ -66,6 +80,17 @@ class BackView(QtWidgets.QWidget):
             self.video_url = event.mimeData().text()
         else:
             event.ignore()
+
+    def uploadVideo(self, event):
+        opener = QtWidgets.QFileDialog()
+        opener.setFileMode(QtWidgets.QFileDialog.ExistingFile)
+        self.video_url, _ = opener.getOpenFileName(self, 
+        "Open video", QtCore.QDir.homePath())
+    
+    def uploadData(self, event):
+        opener = QtWidgets.QFileDialog()
+        opener.setFileMode(QtWidgets.QFileDialog.Directory)
+        self.video_url = str(opener.getExistingDirectory(self, "Select Directory"))
     
 
 
@@ -209,6 +234,11 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             policy = QtWidgets.QSizePolicy()
             policy.setRetainSizeWhenHidden(True)
             radioButton.setSizePolicy(policy)
+        self.sideVideoUploadButton.clicked.connect(self.sideView.uploadVideo)
+        self.sideDataUploadButton.clicked.connect(self.sideView.uploadData)
+        self.backVideoUploadButton.clicked.connect(self.backView.uploadVideo)
+        self.backDataUploadButton.clicked.connect(self.backView.uploadData)
+
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
