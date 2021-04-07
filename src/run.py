@@ -2,6 +2,7 @@ import sys
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 import qdarkstyle
 import controller
+from metric_description import description
 
 
 qtCreatorFile = "src/run_analysis.ui"
@@ -49,8 +50,6 @@ class SideView(QtWidgets.QWidget):
         opener.setFileMode(QtWidgets.QFileDialog.Directory)
         self.video_url = str(opener.getExistingDirectory(self, "Select Directory"))
         
-        
-
 
 class BackView(QtWidgets.QWidget):
 
@@ -91,7 +90,6 @@ class BackView(QtWidgets.QWidget):
         opener = QtWidgets.QFileDialog()
         opener.setFileMode(QtWidgets.QFileDialog.Directory)
         self.video_url = str(opener.getExistingDirectory(self, "Select Directory"))
-    
 
 
 class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -188,11 +186,13 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             if radioButton.isChecked():
                 ID = radioButton.text()[7:]
         global SIDE_FILE_STRUCT
+        curr_metric = self.metricSelectComboBox.currentText()
         try:
-            angle = SIDE_FILE_STRUCT.metric_values[self.metricSelectComboBox.currentText()][int(ID)]
+            angle = SIDE_FILE_STRUCT.metric_values[curr_metric][int(ID)]
         except:
             return
-        self.metricDescriptionText.setText("Angle = {}".format(angle))
+        self.metricDescriptionText.setText("{descrip}\n\nAngle = {angle}".format(
+            angle=angle, descrip=description[curr_metric]))
         chosen = self.metricSelectComboBox.currentText()
         if chosen == "Pelvic Drop" or chosen == "": #TODO: next back metric
             i = 0
