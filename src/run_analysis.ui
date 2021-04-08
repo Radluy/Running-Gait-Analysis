@@ -425,6 +425,46 @@ p, li { white-space: pre-wrap; }
     <string>Load saved data</string>
    </property>
   </widget>
+  <widget class="QComboBox" name="trajectoryPicker">
+   <property name="geometry">
+    <rect>
+     <x>630</x>
+     <y>500</y>
+     <width>79</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>RKnee</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>LKnee</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>RAnkle</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>LAnkle</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>MidHip</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Neck</string>
+    </property>
+   </item>
+  </widget>
  </widget>
  <resources/>
  <connections/>

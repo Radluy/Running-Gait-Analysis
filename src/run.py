@@ -10,21 +10,35 @@ Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 SIDE_FILE_STRUCT = None
 BACK_FILE_STRUCT = None
 
+
+class popup(QtWidgets.QWidget):
+    def __init__(self, text):
+        QtWidgets.QWidget.__init__(self)
+        self.setWindowTitle("Notification")
+        self.layout = QtWidgets.QGridLayout()
+        self.label = QtWidgets.QLabel(text)
+        self.label.setFont(QtGui.QFont('Arial', 18))
+        self.label.setAlignment(QtCore.Qt.AlignCenter)
+        self.layout.addWidget(self.label)
+        self.setLayout(self.layout)
+
+
 class SideView(QtWidgets.QWidget):
 
     def __init__(self, parent=None):
         super(SideView, self).__init__(parent)
         self.setAcceptDrops(True)
-        self.layout = QtWidgets.QGridLayout()
+        self.layout = QtWidgets.QHBoxLayout()
+        self.trajectoryLayout = QtWidgets.QHBoxLayout()
         self.sideViewLabel = QtWidgets.QLabel()
-        self.layout.addWidget(self.sideViewLabel)
+        self.layout.addWidget(self.sideViewLabel, 0)
         self.setLayout(self.layout)
         self.initUI()
 
     def initUI(self):
         self.sideViewLabel.move(5, 10)
         self.setGeometry(5, 10, 640, 360)
-        pixmap = QtGui.QPixmap('./src/images/image_placeholder.png')
+        pixmap = QtGui.QPixmap('./src/images/dark-placeholder.png')
         self.sideViewLabel.setPixmap(pixmap)
 
     def dragEnterEvent(self, event):
@@ -49,6 +63,19 @@ class SideView(QtWidgets.QWidget):
         opener = QtWidgets.QFileDialog()
         opener.setFileMode(QtWidgets.QFileDialog.Directory)
         self.video_url = str(opener.getExistingDirectory(self, "Select Directory"))
+
+    def drawTrajectory(self, value):
+        global SIDE_FILE_STRUCT
+        if SIDE_FILE_STRUCT == None:
+            return
+
+        self.trajectoryLabel = QtWidgets.QLabel()
+        pixmap = QtGui.QPixmap(SIDE_FILE_STRUCT.trajectories[value])
+        self.trajectoryLabel.setPixmap(pixmap)
+        self.trajectoryLayout.addWidget(self.trajectoryLabel, 0)
+        self.trajectoryLabel.setGeometry(QtCore.QRect(5, 10, 640, 360))
+        self.trajectoryLabel.move(self.geometry().topLeft())
+        self.trajectoryLabel.raise_()
         
 
 class BackView(QtWidgets.QWidget):
@@ -65,7 +92,7 @@ class BackView(QtWidgets.QWidget):
     def initUI(self):
         self.backViewLabel.move(655, 10)
         self.setGeometry(655, 10, 640, 360)
-        pixmap = QtGui.QPixmap('./src/images/image_placeholder.png')
+        pixmap = QtGui.QPixmap('./src/images/dark-placeholder.png')
         self.backViewLabel.setPixmap(pixmap)
 
     def dragEnterEvent(self, event):
@@ -137,6 +164,7 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             SIDE_FILE_STRUCT = controller.backend_setup(self.sideView.video_url)
         except:
             #TODO popup saying side view required
+            self.raisePopup("Side View required!")
             return
         try:
             BACK_FILE_STRUCT = controller.backend_setup(self.backView.video_url)
@@ -209,6 +237,15 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     break
                 i += 1
 
+    def raisePopup(self, text):
+        self.popup = popup(text)
+        desktopRect = QtWidgets.QApplication.desktop().availableGeometry()
+        center = desktopRect.center()
+        popup_geo = self.popup.frameGeometry()
+        self.popup.setGeometry(QtCore.QRect(center.x(), center.y(), 200, 100))
+        #self.popup.move(center.x() - popup_geo.width() * 0.5, center.y() - popup_geo.height() * 0.5)
+        self.popup.show()
+
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
@@ -238,6 +275,7 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.sideDataUploadButton.clicked.connect(self.sideView.uploadData)
         self.backVideoUploadButton.clicked.connect(self.backView.uploadVideo)
         self.backDataUploadButton.clicked.connect(self.backView.uploadData)
+        self.trajectoryPicker.currentTextChanged.connect(self.sideView.drawTrajectory)
 
 
 if __name__ == "__main__":
