@@ -8,6 +8,7 @@ keypoints = ["RKnee", "LKnee", "LAnkle", "RAnkle", "Neck", "MidHip"]
 class folderStruct():
 
     def __init__(self, path: str):
+        self.video = os.path.join(path, "video_est.avi")
         self.metric_values = None
 
         json_dir = os.path.join(path, "json")
