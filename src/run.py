@@ -3,6 +3,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets, uic
 import qdarkstyle
 import controller
 from metric_description import description
+from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
+from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 
 qtCreatorFile = "src/run_analysis.ui"
@@ -31,8 +33,14 @@ class SideView(QtWidgets.QWidget):
         self.layout = QtWidgets.QHBoxLayout()
         self.trajectoryLayout = QtWidgets.QHBoxLayout()
         self.sideViewLabel = QtWidgets.QLabel()
-        self.layout.addWidget(self.sideViewLabel, 0)
+        self.layout.addWidget(self.sideViewLabel)
         self.setLayout(self.layout)
+
+        #test
+        self.mediaPlayer = QMediaPlayer()
+        self.videoWidget = QVideoWidget()
+        self.mediaPlayer.setVideoOutput(self.videoWidget)
+
         self.initUI()
 
     def initUI(self):
@@ -77,6 +85,18 @@ class SideView(QtWidgets.QWidget):
         self.trajectoryLabel.move(self.geometry().topLeft())
         self.trajectoryLabel.raise_()
         
+    def play_video(self):
+        global SIDE_FILE_STRUCT
+        self.mediaPlayer.setMedia(QMediaContent(QtCore.QUrl.fromLocalFile(SIDE_FILE_STRUCT.video)))
+        self.layout.removeWidget(self.sideViewLabel)
+        self.layout.addWidget(self.videoWidget)
+        self.mediaPlayer.play()
+
+    def cleanAfterVideo(self, status):
+        if status == QMediaPlayer.EndOfMedia:
+            self.layout.removeWidget(self.videoWidget)
+            self.layout.addWidget(self.sideViewLabel)
+
 
 class BackView(QtWidgets.QWidget):
 
@@ -176,8 +196,8 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def hideRadioButtons(self):
         items = (self.radioLayout.itemAt(i).widget() for i in range(self.radioLayout.count())) 
         for radioButton in items:
-            radioButton.setChecked(False)
             radioButton.setAutoExclusive(False)
+            radioButton.setChecked(False)
             radioButton.hide()
     
     def chosenMetric(self):
@@ -256,7 +276,15 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setSideSliderLength()
         self.setBackSliderLength()
         self.hideRadioButtons()
+        self.sideVideoUploadButton.setIcon(QtGui.QIcon('src/images/video_upload2.png'))
+        self.sideDataUploadButton.setIcon(QtGui.QIcon('src/images/folder_upload.png'))
+        self.backVideoUploadButton.setIcon(QtGui.QIcon('src/images/video_upload2.png'))
+        self.backDataUploadButton.setIcon(QtGui.QIcon('src/images/folder_upload.png'))
+        self.playSideVideoButton.setIcon(QtGui.QIcon('src/images/play-button.png'))
+        self.playBackVideoButton.setIcon(QtGui.QIcon('src/images/play-button.png'))
         self.setSignals()
+        self.playSideVideoButton.clicked.connect(self.sideView.play_video)
+        self.sideView.mediaPlayer.mediaStatusChanged.connect(self.sideView.cleanAfterVideo)
 
     def setSignals(self):
         self.processButton.clicked.connect(self.loadData)
