@@ -32,7 +32,7 @@ def check_formal_reqs(path: str) -> bool:
 def load_folder_struct(path):
     correct_struct = check_formal_reqs(path)
     if not correct_struct:
-        return
+        return None
     struct = folderStruct(path)
     return struct
 

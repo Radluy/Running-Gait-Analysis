@@ -162,6 +162,7 @@ https://github.com/CMU-Perceptual-Computing-Lab/openpose/blob/master/doc/advance
 2. pyqt5
 3. filetype
 4. qdarkstyle
+5. matplotlib
 
 
 openpose accuracy testing -> stickers

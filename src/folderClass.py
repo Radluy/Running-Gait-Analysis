@@ -1,5 +1,9 @@
 import os
 import json_load as jl
+from trajectory import plot_keypoint_trajectory
+
+
+keypoints = ["RKnee", "LKnee", "LAnkle", "RAnkle", "Neck", "MidHip"]
 
 class folderStruct():
 
@@ -21,5 +25,17 @@ class folderStruct():
             self.images.append(os.path.join(image_dir,file))
         self.images.sort()
 
+        trajectory_dir = os.path.join(path, "trajectories")
+        if not os.path.exists(trajectory_dir):
+             os.mkdir(trajectory_dir)
+             for keypoint in keypoints:
+                plot_keypoint_trajectory(self.data, keypoint, self.images[0], trajectory_dir)
+        trajectory_list = os.listdir(trajectory_dir)
+        self.trajectories = {}
+        for file in trajectory_list:
+            for keypoint in keypoints:
+                if file.find(keypoint) != -1:
+                    self.trajectories[keypoint] = (os.path.join(trajectory_dir, file))
+                    break
         
         
