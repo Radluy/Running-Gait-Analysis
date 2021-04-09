@@ -174,3 +174,5 @@ synchronize - frame slider sync
 trajectory integration
 
 Metrics descriptions
+
+video player -> stacked layout for sideview

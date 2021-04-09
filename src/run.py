@@ -33,13 +33,17 @@ class SideView(QtWidgets.QWidget):
         self.layout = QtWidgets.QHBoxLayout()
         self.trajectoryLayout = QtWidgets.QHBoxLayout()
         self.sideViewLabel = QtWidgets.QLabel()
-        self.layout.addWidget(self.sideViewLabel)
+
+        self.stack = QtWidgets.QStackedWidget()
+        self.stack.addWidget(self.sideViewLabel)
+        self.layout.addWidget(self.stack)
         self.setLayout(self.layout)
 
-        #test
         self.mediaPlayer = QMediaPlayer()
+        self.mediaPlayer.setPlaybackRate(0.5)
         self.videoWidget = QVideoWidget()
         self.mediaPlayer.setVideoOutput(self.videoWidget)
+        self.stack.addWidget(self.videoWidget)
 
         self.initUI()
 
@@ -57,7 +61,8 @@ class SideView(QtWidgets.QWidget):
 
     def dropEvent(self, event):
         if event.mimeData().hasUrls:
-            self.video_url = event.mimeData().text()
+            self.video_url = event.mimeData().urls()[0]
+            print(self.video_url)
         else:
             event.ignore()
 
@@ -87,15 +92,15 @@ class SideView(QtWidgets.QWidget):
         
     def play_video(self):
         global SIDE_FILE_STRUCT
+        if SIDE_FILE_STRUCT is None:
+            return
         self.mediaPlayer.setMedia(QMediaContent(QtCore.QUrl.fromLocalFile(SIDE_FILE_STRUCT.video)))
-        self.layout.removeWidget(self.sideViewLabel)
-        self.layout.addWidget(self.videoWidget)
+        self.stack.setCurrentIndex(1)
         self.mediaPlayer.play()
 
     def cleanAfterVideo(self, status):
         if status == QMediaPlayer.EndOfMedia:
-            self.layout.removeWidget(self.videoWidget)
-            self.layout.addWidget(self.sideViewLabel)
+            self.stack.setCurrentIndex(0)
 
 
 class BackView(QtWidgets.QWidget):
@@ -103,9 +108,20 @@ class BackView(QtWidgets.QWidget):
     def __init__(self, parent=None):
         super(BackView, self).__init__(parent)
         self.setAcceptDrops(True)
-        self.layout = QtWidgets.QGridLayout()
+        self.layout = QtWidgets.QHBoxLayout()
         self.backViewLabel = QtWidgets.QLabel()
-        self.layout.addWidget(self.backViewLabel)
+
+        self.stack = QtWidgets.QStackedWidget()
+        self.stack.addWidget(self.backViewLabel)
+        self.layout.addWidget(self.stack)
+        self.setLayout(self.layout)
+
+        self.mediaPlayer = QMediaPlayer()
+        self.mediaPlayer.setPlaybackRate(0.5)
+        self.videoWidget = QVideoWidget()
+        self.mediaPlayer.setVideoOutput(self.videoWidget)
+        self.stack.addWidget(self.videoWidget)
+
         self.setLayout(self.layout)
         self.initUI()
 
@@ -138,6 +154,17 @@ class BackView(QtWidgets.QWidget):
         opener.setFileMode(QtWidgets.QFileDialog.Directory)
         self.video_url = str(opener.getExistingDirectory(self, "Select Directory"))
 
+    def play_video(self):
+        global BACK_FILE_STRUCT
+        if BACK_FILE_STRUCT is None:
+            return
+        self.mediaPlayer.setMedia(QMediaContent(QtCore.QUrl.fromLocalFile(BACK_FILE_STRUCT.video)))
+        self.stack.setCurrentIndex(1)
+        self.mediaPlayer.play()
+
+    def cleanAfterVideo(self, status):
+        if status == QMediaPlayer.EndOfMedia:
+            self.stack.setCurrentIndex(0)
 
 class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
@@ -183,7 +210,6 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         try:
             SIDE_FILE_STRUCT = controller.backend_setup(self.sideView.video_url)
         except:
-            #TODO popup saying side view required
             self.raisePopup("Side View required!")
             return
         try:
@@ -283,8 +309,6 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.playSideVideoButton.setIcon(QtGui.QIcon('src/images/play-button.png'))
         self.playBackVideoButton.setIcon(QtGui.QIcon('src/images/play-button.png'))
         self.setSignals()
-        self.playSideVideoButton.clicked.connect(self.sideView.play_video)
-        self.sideView.mediaPlayer.mediaStatusChanged.connect(self.sideView.cleanAfterVideo)
 
     def setSignals(self):
         self.processButton.clicked.connect(self.loadData)
@@ -304,6 +328,10 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.backVideoUploadButton.clicked.connect(self.backView.uploadVideo)
         self.backDataUploadButton.clicked.connect(self.backView.uploadData)
         self.trajectoryPicker.currentTextChanged.connect(self.sideView.drawTrajectory)
+        self.playBackVideoButton.clicked.connect(self.backView.play_video)
+        self.backView.mediaPlayer.mediaStatusChanged.connect(self.backView.cleanAfterVideo)
+        self.playSideVideoButton.clicked.connect(self.sideView.play_video)
+        self.sideView.mediaPlayer.mediaStatusChanged.connect(self.sideView.cleanAfterVideo)
 
 
 if __name__ == "__main__":
