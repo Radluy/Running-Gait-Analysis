@@ -4,6 +4,7 @@ import os
 from folderClass import folderStruct
 import metrics_lib
 import stance_detector as sd
+from estimator import estimate
 
 
 def check_formal_reqs(path: str) -> bool:
@@ -39,7 +40,7 @@ def load_folder_struct(path):
 
 # return new directory destination
 def call_estimator(path_to_video):
-    pass
+    return estimate(path_to_video)
 
 
 def evaluate(side_data, back_data):
@@ -73,7 +74,7 @@ def backend_setup(path1):
         kind = filetype.guess(path1)
     except:
         #TODO: INCORRECT PATH
-        return
+        return None
     if kind.mime[0:5] == "video":
         new_path = call_estimator(path1)
         return load_folder_struct(new_path)
