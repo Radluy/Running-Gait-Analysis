@@ -53,19 +53,6 @@ class SideView(QtWidgets.QWidget):
         pixmap = QtGui.QPixmap('./src/images/dark-placeholder.png')
         self.sideViewLabel.setPixmap(pixmap)
 
-    def dragEnterEvent(self, event):
-        if event.mimeData().hasUrls:
-            event.accept()
-        else:
-            event.ignore()
-
-    def dropEvent(self, event):
-        if event.mimeData().hasUrls:
-            self.video_url = event.mimeData().urls()[0]
-            print(self.video_url)
-        else:
-            event.ignore()
-
     def uploadVideo(self, event):
         opener = QtWidgets.QFileDialog()
         opener.setFileMode(QtWidgets.QFileDialog.ExistingFile)
@@ -131,18 +118,6 @@ class BackView(QtWidgets.QWidget):
         pixmap = QtGui.QPixmap('./src/images/dark-placeholder.png')
         self.backViewLabel.setPixmap(pixmap)
 
-    def dragEnterEvent(self, event):
-        if event.mimeData().hasUrls:
-            event.accept()
-        else:
-            event.ignore()
-
-    def dropEvent(self, event):
-        if event.mimeData().hasUrls:
-            self.video_url = event.mimeData().text()
-        else:
-            event.ignore()
-
     def uploadVideo(self, event):
         opener = QtWidgets.QFileDialog()
         opener.setFileMode(QtWidgets.QFileDialog.ExistingFile)
@@ -174,6 +149,7 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.sideViewSlider.setMaximum(len(SIDE_FILE_STRUCT.images))
         except:
             self.sideViewSlider.setMaximum(0)
+        self.sideViewSlider.setValue(0)
 
     def setSideViewImage(self):
         global SIDE_FILE_STRUCT
@@ -192,6 +168,7 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.backViewSlider.setMaximum(len(BACK_FILE_STRUCT.images))
         except:
             self.backViewSlider.setMaximum(0)
+        self.backViewSlider.setValue(0)
 
     def setBackViewImage(self):
         global BACK_FILE_STRUCT
@@ -207,11 +184,16 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def loadData(self):
         global SIDE_FILE_STRUCT
         global BACK_FILE_STRUCT
-        try:
-            SIDE_FILE_STRUCT = controller.backend_setup(self.sideView.video_url)
-        except:
+        if self.sideView.video_url is None:
             self.raisePopup("Side View required!")
             return
+
+        SIDE_FILE_STRUCT = controller.backend_setup(self.sideView.video_url)
+
+        if SIDE_FILE_STRUCT is None:
+            self.raisePopup("Incorrect file or folder!")
+            return
+
         try:
             BACK_FILE_STRUCT = controller.backend_setup(self.backView.video_url)
         except:
@@ -253,6 +235,12 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             radioButton.setAutoExclusive(True)
             radioButton.show()
             i += 1
+            
+        curr_metric = self.metricSelectComboBox.currentText()
+        self.metricDescriptionText.setText(description[curr_metric])
+
+    def cleanText(self):
+        self.metricDescriptionText.setText("")
 
     def writeDescription(self, radioButton):
         items = (self.radioLayout.itemAt(i).widget() for i in range(self.radioLayout.count())) 
@@ -313,6 +301,8 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def setSignals(self):
         self.processButton.clicked.connect(self.loadData)
         self.processButton.clicked.connect(self.setSideSliderLength)
+        self.processButton.clicked.connect(self.hideRadioButtons)
+        self.processButton.clicked.connect(self.cleanText)
         self.sideViewSlider.valueChanged.connect(self.setSideViewImage)
         self.processButton.clicked.connect(self.setBackSliderLength)
         self.backViewSlider.valueChanged.connect(self.setBackViewImage)

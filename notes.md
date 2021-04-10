@@ -81,7 +81,8 @@ bin\OpenPoseDemo.exe --video examples/media/video.avi
 
 --display 0
 
-> bin\OpenPoseDemo.exe --video .\my_data\traintracks_data\front1.mp4 --write_json .\outputs\traintrack\front1_json\ --write_video .\outputs\traintrack\front1_est.avi --write_images .\outputs\traintrack\front1_images\ --number_people_max 1 --display 0
+> mkdir back1
+> bin\OpenPoseDemo.exe --video .\my_data\traintracks_data\back1.mp4 --write_json .\outputs\traintrack\back1\json\ --write_video .\outputs\traintrack\back1\video_est.avi --write_images .\outputs\traintrack\back1\images\ --number_people_max 1 --display 0
 
 ## JSON
 
