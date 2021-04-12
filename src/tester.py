@@ -46,3 +46,6 @@ if __name__ == "__main__":
 
     print("\nPelvic drop:")
     pp.pprint(metrics_lib.pelvic_drop(back_data, False))
+
+    print("\nHeel whips:")
+    pp.pprint(metrics_lib.heel_whips(back_data, False))

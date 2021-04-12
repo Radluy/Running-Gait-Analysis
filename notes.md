@@ -151,9 +151,7 @@ https://github.com/CMU-Perceptual-Computing-Lab/openpose/blob/master/doc/advance
 10. ears aligned with shoulders
 
 ## Consultation
-1. front -> back camera
-2. synchronization
-3. GUI mockup
+1. openpose integration
 
 ## QT Designer
 > /mnt/c/Users/rados/Documents/BP-repo/env/lib/python3.8/site-packages/qt5_applications/Qt/bin/designer
@@ -176,4 +174,3 @@ trajectory integration
 
 Metrics descriptions
 
-video player -> stacked layout for sideview

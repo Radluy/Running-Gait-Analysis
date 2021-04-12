@@ -73,8 +73,9 @@ def backend_setup(path1):
     try:
         kind = filetype.guess(path1)
     except:
-        #TODO: INCORRECT PATH
         return None
     if kind.mime[0:5] == "video":
         new_path = call_estimator(path1)
         return load_folder_struct(new_path)
+    else:
+        return None
