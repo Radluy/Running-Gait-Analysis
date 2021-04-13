@@ -1,5 +1,3 @@
-
-
 description = {
     "Torso Lean": """Slight forward lean while running lowers the stress on your knees. Too upright posture or leaning back might cause \"runner's knee\" syndrome, or in other words, pain in front of your knee and around your kneecap. In contrast, running bent too forwards moves the stress onto your hips and ankles. Ideal trunk lean should be around 7°, but 2°-10° is acceptable.""",
     "Knee Flexion": """During the phase where you're standing on one leg, your knee should flex to a maximum angle of at least 45°. This is where your body absorbs the impact from bodyweight moving onto a single leg. Values less than 40° can mean stiff knees which cause excessive stress on other joints and knees themselves.""",

@@ -1,4 +1,7 @@
 class Keypoint():
+    """Class representing one keypoint with it's coordinates and confidence
+    """
+
     def __init__(self, x, y, confidence):
         self.x = x
         self.y = y

@@ -19,7 +19,14 @@ keypoint_order = ["Nose", "Neck", "RShoulder", "RElbow", "RWrist", "LShoulder",
 
 
 def load_json(json_directory_path: str) -> list:
-    """ load json files from a directory and return as an array of dictionaries"""
+    """load json files from a directory and return as an array of dictionaries
+
+    Args:
+        json_directory_path (str): path to directory containing json files
+
+    Returns:
+        list: list of dictionaries representing individual frames
+    """
     data = []
     files = os.listdir(json_directory_path)
     counter = -1
