@@ -13,6 +13,7 @@ def check_formal_reqs(path: str) -> bool:
     video_exists = False
 
     if not os.path.isdir(path):
+        print("log: Input path is not a directory!", file=sys.stderr)
         return False
     
     files = os.listdir(path)
@@ -25,6 +26,7 @@ def check_formal_reqs(path: str) -> bool:
             video_exists = True
     
     if not json_exists or not images_exist or not video_exists:
+        print("Missing data in directory!", file=sys.stderr)
         return False
     else:
         return True
@@ -33,6 +35,7 @@ def check_formal_reqs(path: str) -> bool:
 def load_folder_struct(path):
     correct_struct = check_formal_reqs(path)
     if not correct_struct:
+        print("log: Incorrect structure of directory!", file=sys.stderr)
         return None
     struct = folderStruct(path)
     return struct
@@ -73,6 +76,7 @@ def backend_setup(path1):
     try:
         kind = filetype.guess(path1)
     except:
+        print("log: File is not a video!", file=sys.stderr)
         return None
     if kind.mime[0:5] == "video":
         new_path = call_estimator(path1)

@@ -31,8 +31,7 @@ def load_json(json_directory_path: str) -> list:
             try:
                 keypoints = json_struct["people"][0]["pose_keypoints_2d"]
             except:
-                # TODO: log error
-                # print("empty frame!", file=sys.stderr)
+                print("log: empty frame!", file=sys.stderr)
                 continue
             keypoint_dict = {}
             keypoint_dict["ID"] = counter
