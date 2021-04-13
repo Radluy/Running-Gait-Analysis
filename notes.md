@@ -166,11 +166,10 @@ https://github.com/CMU-Perceptual-Computing-Lab/openpose/blob/master/doc/advance
 
 openpose accuracy testing -> stickers
 
-backview - crop last frames when turning
-
 synchronize - frame slider sync
 
 trajectory integration
 
 Metrics descriptions
 
+loading icon while estimator running
