@@ -166,8 +166,6 @@ https://github.com/CMU-Perceptual-Computing-Lab/openpose/blob/master/doc/advance
 
 openpose accuracy testing -> stickers
 
-synchronize - frame slider sync
-
 trajectory integration
 
 Metrics descriptions
@@ -175,3 +173,7 @@ Metrics descriptions
 loading icon while estimator running
 
 parallel thighs metrics
+
+paint on frame select - coordinates
+
+OPENPOSE -> call after install models/getBaseModels.bat

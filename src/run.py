@@ -49,6 +49,12 @@ class SideView(QtWidgets.QWidget):
 
         self.set_placeholder()
 
+    def paintEvent(self, event):
+        """painter = QtGui.QPainter(self)
+        painter.setPen(QtCore.Qt.red)
+        
+        painter.drawLine(500,500,200,200)"""
+
     def set_placeholder(self):
         pixmap = QtGui.QPixmap('./src/images/dark-placeholder.png')
         self.sideViewLabel.setPixmap(pixmap)

@@ -2,10 +2,18 @@ import subprocess
 import os
 
 
-openpose_path = "C:/Users/rados/Documents/BP/openpose/openpose"
+openpose_path = "openpose"
 
 
 def estimate(video_path: str) -> str:
+    """
+
+    Args:
+        video_path (str): path to video input for estimator
+
+    Returns:
+        str: path to directory with estimator output
+    """    
     file_name = os.path.basename(video_path)
     file_name = os.path.splitext(file_name)[0]
     directory = os.path.join(os.getcwd(), "./outputs/{}".format(file_name))
@@ -17,7 +25,7 @@ def estimate(video_path: str) -> str:
     if result1.returncode != 0:
         print("dir: " + str(result1.stderr))
 
-    print("Waiting for estimator...")
+    print("log: Waiting for estimator...")
     result2 = subprocess.run(
         ["powershell", "-Command", cmd], capture_output=True)
     if result2.returncode != 0:
