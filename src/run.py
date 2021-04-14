@@ -33,6 +33,8 @@ class SideView(QtWidgets.QWidget):
         self.layout = QtWidgets.QHBoxLayout()
         self.trajectoryLayout = QtWidgets.QHBoxLayout()
         self.sideViewLabel = QtWidgets.QLabel()
+        self.sideViewLabel.move(5, 10)
+        self.setGeometry(5, 10, 640, 360)
 
         self.stack = QtWidgets.QStackedWidget()
         self.stack.addWidget(self.sideViewLabel)
@@ -45,24 +47,23 @@ class SideView(QtWidgets.QWidget):
         self.mediaPlayer.setVideoOutput(self.videoWidget)
         self.stack.addWidget(self.videoWidget)
 
-        self.initUI()
+        self.set_placeholder()
 
-    def initUI(self):
-        self.sideViewLabel.move(5, 10)
-        self.setGeometry(5, 10, 640, 360)
+    def set_placeholder(self):
         pixmap = QtGui.QPixmap('./src/images/dark-placeholder.png')
         self.sideViewLabel.setPixmap(pixmap)
 
     def uploadVideo(self, event):
         opener = QtWidgets.QFileDialog()
         opener.setFileMode(QtWidgets.QFileDialog.ExistingFile)
-        self.video_url, _ = opener.getOpenFileName(self, 
-        "Open video", QtCore.QDir.homePath())
-    
+        self.video_url, _ = opener.getOpenFileName(self,
+                                                   "Open video", QtCore.QDir.homePath())
+
     def uploadData(self, event):
         opener = QtWidgets.QFileDialog()
         opener.setFileMode(QtWidgets.QFileDialog.Directory)
-        self.video_url = str(opener.getExistingDirectory(self, "Select Directory"))
+        self.video_url = str(
+            opener.getExistingDirectory(self, "Select Directory"))
 
     def drawTrajectory(self, value):
         global SIDE_FILE_STRUCT
@@ -76,12 +77,13 @@ class SideView(QtWidgets.QWidget):
         self.trajectoryLabel.setGeometry(QtCore.QRect(5, 10, 640, 360))
         self.trajectoryLabel.move(self.geometry().topLeft())
         self.trajectoryLabel.raise_()
-        
+
     def play_video(self):
         global SIDE_FILE_STRUCT
         if SIDE_FILE_STRUCT is None:
             return
-        self.mediaPlayer.setMedia(QMediaContent(QtCore.QUrl.fromLocalFile(SIDE_FILE_STRUCT.video)))
+        self.mediaPlayer.setMedia(QMediaContent(
+            QtCore.QUrl.fromLocalFile(SIDE_FILE_STRUCT.video)))
         self.stack.setCurrentIndex(1)
         self.mediaPlayer.play()
 
@@ -121,25 +123,28 @@ class BackView(QtWidgets.QWidget):
     def uploadVideo(self, event):
         opener = QtWidgets.QFileDialog()
         opener.setFileMode(QtWidgets.QFileDialog.ExistingFile)
-        self.video_url, _ = opener.getOpenFileName(self, 
-        "Open video", QtCore.QDir.homePath())
-    
+        self.video_url, _ = opener.getOpenFileName(self,
+                                                   "Open video", QtCore.QDir.homePath())
+
     def uploadData(self, event):
         opener = QtWidgets.QFileDialog()
         opener.setFileMode(QtWidgets.QFileDialog.Directory)
-        self.video_url = str(opener.getExistingDirectory(self, "Select Directory"))
+        self.video_url = str(
+            opener.getExistingDirectory(self, "Select Directory"))
 
     def play_video(self):
         global BACK_FILE_STRUCT
         if BACK_FILE_STRUCT is None:
             return
-        self.mediaPlayer.setMedia(QMediaContent(QtCore.QUrl.fromLocalFile(BACK_FILE_STRUCT.video)))
+        self.mediaPlayer.setMedia(QMediaContent(
+            QtCore.QUrl.fromLocalFile(BACK_FILE_STRUCT.video)))
         self.stack.setCurrentIndex(1)
         self.mediaPlayer.play()
 
     def cleanAfterVideo(self, status):
         if status == QMediaPlayer.EndOfMedia:
             self.stack.setCurrentIndex(0)
+
 
 class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
@@ -154,13 +159,17 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def setSideViewImage(self):
         global SIDE_FILE_STRUCT
         try:
-            pixmap = QtGui.QPixmap(SIDE_FILE_STRUCT.images[self.sideViewSlider.value()])
+            pixmap = QtGui.QPixmap(
+                SIDE_FILE_STRUCT.images[self.sideViewSlider.value()])
         except:
             return
         pixmap = pixmap.scaled(640, 360)
         self.sideView.sideViewLabel.setPixmap(pixmap)
         frame_id = SIDE_FILE_STRUCT.data[self.sideViewSlider.value()]["ID"]
         self.sideLabel.setText("SIDE VIEW - FRAME: {}".format(frame_id))
+
+        if self.syncOffset != 0:
+            self.backViewSlider.setValue(self.sideViewSlider.value() - self.syncOffset)
 
     def setBackSliderLength(self):
         global BACK_FILE_STRUCT
@@ -173,13 +182,17 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def setBackViewImage(self):
         global BACK_FILE_STRUCT
         try:
-            pixmap = QtGui.QPixmap(BACK_FILE_STRUCT.images[self.backViewSlider.value()])
+            pixmap = QtGui.QPixmap(
+                BACK_FILE_STRUCT.images[self.backViewSlider.value()])
         except:
             return
         pixmap = pixmap.scaled(640, 360)
         self.backView.backViewLabel.setPixmap(pixmap)
         frame_id = BACK_FILE_STRUCT.data[self.backViewSlider.value()]["ID"]
         self.backLabel.setText("BACK VIEW - FRAME: {}".format(frame_id))
+
+        if self.syncOffset != 0:
+            self.sideViewSlider.setValue(self.backViewSlider.value() + self.syncOffset)
 
     def loadData(self):
         global SIDE_FILE_STRUCT
@@ -192,22 +205,28 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         if SIDE_FILE_STRUCT is None:
             self.raisePopup("Incorrect file or folder!")
+            self.sideView.set_placeholder()
+            self.sideLabel.setText("SIDE VIEW - FRAME: ")
             return
 
         try:
-            BACK_FILE_STRUCT = controller.backend_setup(self.backView.video_url)
+            BACK_FILE_STRUCT = controller.backend_setup(
+                self.backView.video_url)
         except:
-            SIDE_FILE_STRUCT.metric_values = controller.evaluate(SIDE_FILE_STRUCT.data, None)
+            SIDE_FILE_STRUCT.metric_values = controller.evaluate(
+                SIDE_FILE_STRUCT.data, None)
             return
-        SIDE_FILE_STRUCT.metric_values = controller.evaluate(SIDE_FILE_STRUCT.data, BACK_FILE_STRUCT.data)
+        SIDE_FILE_STRUCT.metric_values = controller.evaluate(
+            SIDE_FILE_STRUCT.data, BACK_FILE_STRUCT.data)
 
     def hideRadioButtons(self):
-        items = (self.radioLayout.itemAt(i).widget() for i in range(self.radioLayout.count())) 
+        items = (self.radioLayout.itemAt(i).widget()
+                 for i in range(self.radioLayout.count()))
         for radioButton in items:
             radioButton.setAutoExclusive(False)
             radioButton.setChecked(False)
             radioButton.hide()
-    
+
     def chosenMetric(self):
         global SIDE_FILE_STRUCT
         global BACK_FILE_STRUCT
@@ -218,13 +237,14 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.metricDescriptionText.setText("")
         chosen_metric = self.metricSelectComboBox.currentText()
         self.hideRadioButtons()
-        
+
         try:
             vals = SIDE_FILE_STRUCT.metric_values[chosen_metric]
         except:
-            self.metricDescriptionText.setText("Back view needed for this metric!")
+            self.metricDescriptionText.setText(
+                "Back view needed for this metric!")
             return
-        
+
         i = 0
         for val in vals.keys():
             try:
@@ -235,7 +255,7 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             radioButton.setAutoExclusive(True)
             radioButton.show()
             i += 1
-            
+
         curr_metric = self.metricSelectComboBox.currentText()
         self.metricDescriptionText.setText(description[curr_metric])
 
@@ -243,7 +263,8 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.metricDescriptionText.setText("")
 
     def writeDescription(self, radioButton):
-        items = (self.radioLayout.itemAt(i).widget() for i in range(self.radioLayout.count())) 
+        items = (self.radioLayout.itemAt(i).widget()
+                 for i in range(self.radioLayout.count()))
         for radioButton in items:
             if radioButton.isChecked():
                 ID = radioButton.text()[7:]
@@ -256,7 +277,7 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.metricDescriptionText.setText("{descrip}\n\nAngle = {angle}".format(
             angle=angle, descrip=description[curr_metric]))
         chosen = self.metricSelectComboBox.currentText()
-        if chosen == "Pelvic Drop" or chosen == "": #TODO: next back metric
+        if chosen == "Pelvic Drop" or chosen == "":  # TODO: next back metric
             i = 0
             for frame in BACK_FILE_STRUCT.data:
                 if frame["ID"] == int(ID):
@@ -280,6 +301,18 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         #self.popup.move(center.x() - popup_geo.width() * 0.5, center.y() - popup_geo.height() * 0.5)
         self.popup.show()
 
+    def synchronizeViews(self, button):
+        if not SIDE_FILE_STRUCT or not BACK_FILE_STRUCT:
+            button.setChecked(False)
+            return self.raisePopup("Both views needed for synchronization")
+
+        if button.isChecked() == True:
+            sideId = self.sideViewSlider.value()
+            backId = self.backViewSlider.value()
+            self.syncOffset = sideId - backId
+        else:
+            self.syncOffset = 0
+
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
@@ -290,12 +323,19 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setSideSliderLength()
         self.setBackSliderLength()
         self.hideRadioButtons()
-        self.sideVideoUploadButton.setIcon(QtGui.QIcon('src/images/video_upload2.png'))
-        self.sideDataUploadButton.setIcon(QtGui.QIcon('src/images/folder_upload.png'))
-        self.backVideoUploadButton.setIcon(QtGui.QIcon('src/images/video_upload2.png'))
-        self.backDataUploadButton.setIcon(QtGui.QIcon('src/images/folder_upload.png'))
-        self.playSideVideoButton.setIcon(QtGui.QIcon('src/images/play-button.png'))
-        self.playBackVideoButton.setIcon(QtGui.QIcon('src/images/play-button.png'))
+        self.syncOffset = 0
+        self.sideVideoUploadButton.setIcon(
+            QtGui.QIcon('src/images/video_upload2.png'))
+        self.sideDataUploadButton.setIcon(
+            QtGui.QIcon('src/images/folder_upload.png'))
+        self.backVideoUploadButton.setIcon(
+            QtGui.QIcon('src/images/video_upload2.png'))
+        self.backDataUploadButton.setIcon(
+            QtGui.QIcon('src/images/folder_upload.png'))
+        self.playSideVideoButton.setIcon(
+            QtGui.QIcon('src/images/play-button.png'))
+        self.playBackVideoButton.setIcon(
+            QtGui.QIcon('src/images/play-button.png'))
         self.setSignals()
 
     def setSignals(self):
@@ -307,7 +347,8 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.processButton.clicked.connect(self.setBackSliderLength)
         self.backViewSlider.valueChanged.connect(self.setBackViewImage)
         self.metricSelectComboBox.activated.connect(self.chosenMetric)
-        items = (self.radioLayout.itemAt(i).widget() for i in range(self.radioLayout.count())) 
+        items = (self.radioLayout.itemAt(i).widget()
+                 for i in range(self.radioLayout.count()))
         for radioButton in items:
             radioButton.clicked.connect(self.writeDescription)
             policy = QtWidgets.QSizePolicy()
@@ -317,11 +358,15 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.sideDataUploadButton.clicked.connect(self.sideView.uploadData)
         self.backVideoUploadButton.clicked.connect(self.backView.uploadVideo)
         self.backDataUploadButton.clicked.connect(self.backView.uploadData)
-        self.trajectoryPicker.currentTextChanged.connect(self.sideView.drawTrajectory)
+        self.trajectoryPicker.currentTextChanged.connect(
+            self.sideView.drawTrajectory)
         self.playBackVideoButton.clicked.connect(self.backView.play_video)
-        self.backView.mediaPlayer.mediaStatusChanged.connect(self.backView.cleanAfterVideo)
+        self.backView.mediaPlayer.mediaStatusChanged.connect(
+            self.backView.cleanAfterVideo)
         self.playSideVideoButton.clicked.connect(self.sideView.play_video)
-        self.sideView.mediaPlayer.mediaStatusChanged.connect(self.sideView.cleanAfterVideo)
+        self.sideView.mediaPlayer.mediaStatusChanged.connect(
+            self.sideView.cleanAfterVideo)
+        self.syncCheckBox.stateChanged.connect(lambda:self.synchronizeViews(self.syncCheckBox))
 
 
 if __name__ == "__main__":

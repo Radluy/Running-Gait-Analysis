@@ -360,10 +360,10 @@ p, li { white-space: pre-wrap; }
     </item>
    </layout>
   </widget>
-  <widget class="QCheckBox" name="checkBox">
+  <widget class="QCheckBox" name="syncCheckBox">
    <property name="geometry">
     <rect>
-     <x>610</x>
+     <x>620</x>
      <y>460</y>
      <width>121</width>
      <height>21</height>
