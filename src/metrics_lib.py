@@ -261,9 +261,9 @@ def pelvic_drop(data: list, show_all: bool) -> dict:
         dict: dictionary of frame IDs and pelvic drop angles
     """
     FILTER = 80
-    MAX_ANGLE = 7
+    MAX_ANGLE = 6
     angle_dict = {}
-    for frame in data:
+    for frame in data[0:40]:
         angle = utils.angle_2points(frame["RHip"], frame["LHip"])
         angle = abs(angle)
         if show_all and angle < FILTER:

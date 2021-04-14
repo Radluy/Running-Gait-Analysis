@@ -26,7 +26,7 @@ def check_formal_reqs(path: str) -> bool:
             video_exists = True
     
     if not json_exists or not images_exist or not video_exists:
-        print("Missing data in directory!", file=sys.stderr)
+        print("log: Missing data in directory!", file=sys.stderr)
         return False
     else:
         return True

@@ -173,3 +173,5 @@ trajectory integration
 Metrics descriptions
 
 loading icon while estimator running
+
+parallel thighs metrics
