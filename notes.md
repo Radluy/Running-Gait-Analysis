@@ -177,3 +177,9 @@ parallel thighs metrics
 paint on frame select - coordinates
 
 OPENPOSE -> call after install models/getBaseModels.bat
+### OpenPose setup
+> wget https://github.com/CMU-Perceptual-Computing-Lab/openpose/releases/download/v1.7.0/openpose-1.7.0-binaries-win64-cpu-python3.7-flir-3d.zip
+
+> unzip openpose-1.7.0-binaries-win64-cpu-python3.7-flir-3d.zip
+
+> openpose/models/getBaseModels.bat

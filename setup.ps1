@@ -1,0 +1,12 @@
+Write-host "Initializing setup for OpenPose, this may take a few minutes...";
+Write-host "Downloading OpenPose from: https://github.com/CMU-Perceptual-Computing-Lab/openpose...";
+$ProgressPreference = 'SilentlyContinue';
+Invoke-WebRequest https://github.com/CMU-Perceptual-Computing-Lab/openpose/releases/download/v1.7.0/openpose-1.7.0-binaries-win64-cpu-python3.7-flir-3d.zip -OutFile openpose.zip;
+Write-host "Extracting contents...";
+Expand-Archive -Path ./openpose.zip -DestinationPath ./;
+Write-host "Downloading necessary models...";
+cd openpose/models;
+./getBaseModels.bat;
+Write-host "Removing zip file...";
+cd ../..;
+rm .\openpose.zip;

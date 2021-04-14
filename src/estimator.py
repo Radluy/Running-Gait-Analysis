@@ -6,7 +6,7 @@ openpose_path = "openpose"
 
 
 def estimate(video_path: str) -> str:
-    """
+    """Setup input/output paths for OpenPose and call the estimator as powershell subprocess
 
     Args:
         video_path (str): path to video input for estimator
