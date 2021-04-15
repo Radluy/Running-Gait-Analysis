@@ -1,3 +1,5 @@
+Write-host "Checking for existance of openpose directory...";
+if (Test-Path ./openpose -PathType Container) {Write-host "OpenPose already exists"; exit;};
 Write-host "Initializing setup for OpenPose, this may take a few minutes...";
 Write-host "Downloading OpenPose from: https://github.com/CMU-Perceptual-Computing-Lab/openpose...";
 $ProgressPreference = 'SilentlyContinue';
