@@ -3,9 +3,10 @@ description = {
     "Knee Flexion": """During the phase where you're standing on one leg, your knee should flex to a maximum angle of at least 45°. This is where your body absorbs the impact from bodyweight moving onto a single leg. Values less than 40° can mean stiff knees which cause excessive stress on other joints and knees themselves.""",
     "Tibia Angle": """At the moment when a foot is hitting the ground and your weight is moved onto that leg, the angle of your tibia, or shin bone, makes a big difference. Imagine this as a position of your ankle versus the position of your knee. When the ankle is more forward, your knee can't flex freely and is hurting in the process. When your bodyweight moves onto the stance leg, the knee should be slightly forward or vertical with your ankle.""",
     "Center of Mass Displacement": "",
-    "Elbow Angle": "",
+    "Elbow Angle": """Elbows should be at a 90° angle to gain optimal efficiency. However, it's okay to lower your arms one in a while to release some tension from your back and shoulders. Incorrect elbow position doesn't cause injuries, just a decrease in speed and power saving.""",
     "Hip Extension": """Hip extension is measured just after standing on a leg, when you start pushing off of the ground. It can be a sign of limited mobility. This occurrence is observed as an angle between the thigh and the vertical axis of the side view. Exact numbers can differ according to the runner's build but an angle lower than 10° can indicate limited flexion and possible future problems.""",
     "Feet Strike": "",
-    "Pelvic Drop": "",
+    "Pelvic Drop": """Your hip bones should stay fairly horizontal with each other while running. If one side drops significantly lower than the other, it could mean that your muscles in that area are weak or fatigued. The maximal expected angle between the bones is set to 6°. Although, impacts on injuries and efficiency were not yet studied.""",
     "Heel Whips": "",
+    "Parallel Legs": "",
 }
