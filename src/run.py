@@ -283,7 +283,7 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.metricDescriptionText.setText("{descrip}\n\nAngle = {angle}".format(
             angle=angle, descrip=description[curr_metric]))
         chosen = self.metricSelectComboBox.currentText()
-        if chosen == "Pelvic Drop" or chosen == "":  # TODO: next back metric
+        if chosen == "Pelvic Drop" or chosen == "Parallel Legs":
             i = 0
             for frame in BACK_FILE_STRUCT.data:
                 if frame["ID"] == int(ID):

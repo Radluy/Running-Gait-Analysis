@@ -274,5 +274,20 @@ def pelvic_drop(data: list, show_all: bool) -> dict:
     return angle_dict
 
 
+def parallel_legs(data: list, show_all: bool) -> dict:
+    angle_dict = {}
+    for frame in data[10:30]:
+        angle_R = utils.angle_2points(frame["RKnee"], frame["RHip"])
+        angle_L = utils.angle_2points(frame["LKnee"], frame["LHip"])
+        diff = abs(angle_R - angle_L)
+        #print("ID: {ID}\nL: {L}\nR: {R}\ndiff: {d}".format(ID=frame["ID"], L=angle_L, R=angle_R, d=diff))
+        if show_all:
+            angle_dict[frame["ID"]] = diff
+        elif diff > 10:
+            angle_dict[frame["ID"]] = diff
+    
+    return angle_dict
+
+
 if __name__ == "__main__":
     pass

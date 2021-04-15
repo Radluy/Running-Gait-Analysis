@@ -158,6 +158,11 @@
      <string>Pelvic Drop</string>
     </property>
    </item>
+   <item>
+    <property name="text">
+     <string>Parallel Legs</string>
+    </property>
+   </item>
   </widget>
   <widget class="QTextBrowser" name="metricDescriptionText">
    <property name="geometry">

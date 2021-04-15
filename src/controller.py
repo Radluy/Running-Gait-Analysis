@@ -63,6 +63,7 @@ def evaluate(side_data, back_data):
         metric_values["Hip Extension"] = metrics_lib.hip_extension(side_data, False)
         metric_values["Feet Strike"] = metrics_lib.feet_strike(side_data, False)
         metric_values["Pelvic Drop"] = metrics_lib.pelvic_drop(back_data, False)
+        metric_values["Parallel Legs"] = metrics_lib.parallel_legs(back_data, False)
     except:
         pass
 
