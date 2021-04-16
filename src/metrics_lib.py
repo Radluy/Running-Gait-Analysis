@@ -254,7 +254,7 @@ def pelvic_drop(data: list, show_all: bool) -> dict:
     """Calculate angle of pelvic drop from back view
 
     Args:
-        data (list): data structure of keypoint positions from pose estimator
+        data (list): data structure of keypoint positions from pose estimator - back view
         show_all (bool): whether to return values for each stance or only irregular ones
 
     Returns:
@@ -275,12 +275,20 @@ def pelvic_drop(data: list, show_all: bool) -> dict:
 
 
 def parallel_legs(data: list, show_all: bool) -> dict:
+    """Determine if thighs are parallel from back view
+
+    Args:
+        data (list): data structure of keypoint positions from pose estimator - back view
+        show_all (bool): whether to return values for each stance or only irregular ones
+
+    Returns:
+        dict: dictionary of frame IDs and angles between legs
+    """
     angle_dict = {}
     for frame in data[10:30]:
         angle_R = utils.angle_2points(frame["RKnee"], frame["RHip"])
         angle_L = utils.angle_2points(frame["LKnee"], frame["LHip"])
         diff = abs(angle_R - angle_L)
-        #print("ID: {ID}\nL: {L}\nR: {R}\ndiff: {d}".format(ID=frame["ID"], L=angle_L, R=angle_R, d=diff))
         if show_all:
             angle_dict[frame["ID"]] = diff
         elif diff > 10:

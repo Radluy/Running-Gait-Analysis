@@ -29,6 +29,7 @@ class SideView(QtWidgets.QWidget):
 
     def __init__(self, parent=None):
         super(SideView, self).__init__(parent)
+        self.video_url = None
         self.setAcceptDrops(True)
         self.layout = QtWidgets.QHBoxLayout()
         self.trajectoryLayout = QtWidgets.QHBoxLayout()
@@ -105,6 +106,8 @@ class BackView(QtWidgets.QWidget):
         self.setAcceptDrops(True)
         self.layout = QtWidgets.QHBoxLayout()
         self.backViewLabel = QtWidgets.QLabel()
+        self.backViewLabel.move(655, 10)
+        self.setGeometry(655, 10, 640, 360)
 
         self.stack = QtWidgets.QStackedWidget()
         self.stack.addWidget(self.backViewLabel)
@@ -118,11 +121,9 @@ class BackView(QtWidgets.QWidget):
         self.stack.addWidget(self.videoWidget)
 
         self.setLayout(self.layout)
-        self.initUI()
+        self.set_placeholder()
 
-    def initUI(self):
-        self.backViewLabel.move(655, 10)
-        self.setGeometry(655, 10, 640, 360)
+    def set_placeholder(self):
         pixmap = QtGui.QPixmap('./src/images/dark-placeholder.png')
         self.backViewLabel.setPixmap(pixmap)
 
@@ -174,7 +175,7 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         frame_id = SIDE_FILE_STRUCT.data[self.sideViewSlider.value()]["ID"]
         self.sideLabel.setText("SIDE VIEW - FRAME: {}".format(frame_id))
 
-        if self.syncOffset != 0:
+        if self.syncOffset != None:
             self.backViewSlider.setValue(self.sideViewSlider.value() - self.syncOffset)
 
     def setBackSliderLength(self):
@@ -197,7 +198,7 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         frame_id = BACK_FILE_STRUCT.data[self.backViewSlider.value()]["ID"]
         self.backLabel.setText("BACK VIEW - FRAME: {}".format(frame_id))
 
-        if self.syncOffset != 0:
+        if self.syncOffset != None:
             self.sideViewSlider.setValue(self.backViewSlider.value() + self.syncOffset)
 
     def loadData(self):
@@ -317,7 +318,7 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             backId = self.backViewSlider.value()
             self.syncOffset = sideId - backId
         else:
-            self.syncOffset = 0
+            self.syncOffset = None
 
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
@@ -329,7 +330,7 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setSideSliderLength()
         self.setBackSliderLength()
         self.hideRadioButtons()
-        self.syncOffset = 0
+        self.syncOffset = None
         self.sideVideoUploadButton.setIcon(
             QtGui.QIcon('src/images/video_upload2.png'))
         self.sideDataUploadButton.setIcon(
@@ -349,6 +350,8 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.processButton.clicked.connect(self.setSideSliderLength)
         self.processButton.clicked.connect(self.hideRadioButtons)
         self.processButton.clicked.connect(self.cleanText)
+        self.processButton.clicked.connect(self.sideView.set_placeholder)
+        self.processButton.clicked.connect(self.backView.set_placeholder)
         self.sideViewSlider.valueChanged.connect(self.setSideViewImage)
         self.processButton.clicked.connect(self.setBackSliderLength)
         self.backViewSlider.valueChanged.connect(self.setBackViewImage)

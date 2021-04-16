@@ -71,7 +71,6 @@ def evaluate(side_data, back_data):
 
 
 def backend_setup(path1):
-    isVideo = False
     if os.path.isdir(path1):
         return load_folder_struct(path1)
     try:
