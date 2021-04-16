@@ -28,6 +28,10 @@
   <property name="windowTitle">
    <string>Running Gait Analysis</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>images/shoe_icon.png</normaloff>images/shoe_icon.png</iconset>
+  </property>
   <widget class="QPushButton" name="processButton">
    <property name="geometry">
     <rect>
