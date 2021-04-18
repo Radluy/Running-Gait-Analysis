@@ -6,6 +6,10 @@ import metrics_lib
 import stance_detector as sd
 from estimator import estimate
 import sync
+import utils
+from PIL import Image
+from keypoint_class import Keypoint
+from metric_description import corresponding_keypoints
 
 
 def check_formal_reqs(path: str) -> bool:
@@ -131,3 +135,43 @@ def auto_sync(side_data: folderStruct, back_data: folderStruct):
     id_dict["back"] = int(back_frame)
 
     return id_dict
+
+
+def setup_highlight(frame_id: str, side_data: folderStruct, metric_name: str):
+    #image dimensions
+    image = Image.open(side_data.images[0])
+    width, height = image.size
+        
+    #get frame dict by id
+    corr_frame = None
+    for frame in side_data.data:
+        if frame["ID"] == int(frame_id):
+            corr_frame = frame
+            break
+    
+    right_direction = utils.is_going_right(side_data.data)
+    right_front = utils.right_leg_front(side_data.data, corr_frame)
+    if metric_name in ["Knee Flexion", "Tibia Angle", "Feet Strike", "Hip Extension"]:
+        if right_front:
+            metric_name = metric_name + "R"
+        else:
+            metric_name = metric_name + "L"
+    elif metric_name == "Elbow Angle":
+        if right_direction:
+            metric_name = metric_name + "R"
+        else:
+            metric_name = metric_name + "L"
+    
+    #elif metric in 
+    
+    #determine points on canvas
+    keypoints = corresponding_keypoints[metric_name]
+    points = []
+    for keypoint in keypoints:
+        point = corr_frame[keypoint]
+        new_point = Keypoint()
+        new_point.x = int(point.x/width*640)
+        new_point.y = int(point.y/height*360)
+        points.append(new_point)
+    
+    return points

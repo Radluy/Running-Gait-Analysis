@@ -10,3 +10,21 @@ description = {
     "Heel Whips": "",
     "Parallel Legs": "",
 }
+
+corresponding_keypoints = {
+    "Torso Lean": ["Neck", "MidHip"],
+    "Knee FlexionR": ["RAnkle", "RKnee", "RHip"],
+    "Knee FlexionL": ["LAnkle", "LKnee", "LHip"],
+    "Tibia AngleR": ["RAnkle", "RKnee"],
+    "Tibia AngleL": ["LAnkle", "LKnee"],
+    "Center of Mass Displacement": ["MidHip", "MidHip"],
+    "Elbow AngleR": ["RWrist", "RElbow", "RShoulder"],
+    "Elbow AngleL": ["LWrist", "LElbow", "LShoulder"],
+    "Hip ExtensionR": ["LKnee", "LHip"],
+    "Hip ExtensionL": ["RKnee", "RHip"],
+    "Feet StrikeR": ["RHeel", "RBigToe"],
+    "Feet StrikeL": ["LHeel", "LBigToe"],
+    "Pelvic Drop": [],
+    "Heel Whips": [],
+    "Parallel Legs": [],
+}

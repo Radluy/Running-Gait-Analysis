@@ -129,16 +129,6 @@
    </item>
    <item>
     <property name="text">
-     <string>Elbow Angle</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>Center of Mass Displacement</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
      <string>Knee Flexion</string>
     </property>
    </item>
@@ -165,6 +155,16 @@
    <item>
     <property name="text">
      <string>Parallel Legs</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Elbow Angle</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Center of Mass Displacement</string>
     </property>
    </item>
   </widget>

@@ -2,7 +2,7 @@ import sys
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 import qdarkstyle
 import controller
-from metric_description import description
+from metric_description import description, corresponding_keypoints
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 
@@ -334,6 +334,34 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
             self.syncOffset = None
 
+    def highlight_metric(self, metric):
+        #painter setup
+        painter = QtGui.QPainter(self.sideView.sideViewLabel.pixmap())
+        pen = QtGui.QPen()
+        pen.setWidth(6)
+        pen.setColor(QtGui.QColor(255, 255, 255, 180))
+        painter.setPen(pen)
+
+        #get frame id from radiobox text
+        items = (self.radioLayout.itemAt(i).widget()
+                 for i in range(self.radioLayout.count()))
+        for radioButton in items:
+            if radioButton.isChecked():
+                frame_id = radioButton.text()[7:]
+                break
+
+        points = controller.setup_highlight(frame_id, SIDE_FILE_STRUCT, metric)
+
+        painter.drawLine(points[0].x, points[0].y, points[1].x, points[1].y)
+
+        if len(points) == 3:
+            painter.drawLine(points[1].x, points[1].y, points[2].x, points[2].y)
+
+        if len(points) == 4:
+            painter.drawLine(points[2].x, points[2].y, points[3].x, points[3].y)
+        
+        painter.end()
+
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
@@ -374,6 +402,7 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                  for i in range(self.radioLayout.count()))
         for radioButton in items:
             radioButton.clicked.connect(self.writeDescription)
+            radioButton.clicked.connect(lambda:self.highlight_metric(self.metricSelectComboBox.currentText()))
             policy = QtWidgets.QSizePolicy()
             policy.setRetainSizeWhenHidden(True)
             radioButton.setSizePolicy(policy)
