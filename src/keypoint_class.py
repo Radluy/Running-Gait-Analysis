@@ -2,7 +2,7 @@ class Keypoint():
     """Class representing one keypoint with it's coordinates and confidence
     """
 
-    def __init__(self, x, y, confidence):
+    def __init__(self, x=None, y=None, confidence=None):
         self.x = x
         self.y = y
         self.confidence = confidence
