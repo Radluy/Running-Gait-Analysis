@@ -58,3 +58,24 @@ def is_going_right(data: list) -> bool:
         return False
 
 
+def right_leg_front(data: list, frame: dict) -> bool:
+    """determine which leg is in the front 
+
+    Args:
+        data (list): data structure of keypoint positions from pose estimator
+        frame (dict): frame where the condition is determined
+
+    Returns:
+        bool: True if right leg is in the front, False otherwise
+    """
+    if is_going_right(data):
+        if frame["RAnkle"].x > frame["LAnkle"].x:
+            return True
+        else:
+            return False
+    else:
+        if frame["RAnkle"].x > frame["LAnkle"].x:
+            return False
+        else:
+            return True
+

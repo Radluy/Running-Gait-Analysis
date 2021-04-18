@@ -4,21 +4,6 @@ import utils
 import stance_detector as sd
 
 
-def right_leg_front(frame: dict) -> bool:
-    """determine which leg is in the front 
-
-    Args:
-        frame (dict): one frame from pose estimator
-
-    Returns:
-        bool: True if right leg is in the front, False otherwise
-    """
-    if frame["RKnee"].x > frame["LKnee"].x:
-        return True
-    else:
-        return False
-
-
 def find_side_sync_point(side_data: list) -> int:
     """finds synchronization frame from side view.
     frame from stance chunk with smallest knee angle of back leg
