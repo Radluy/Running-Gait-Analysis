@@ -24,7 +24,7 @@ corresponding_keypoints = {
     "Hip ExtensionL": ["RKnee", "RHip"],
     "Feet StrikeR": ["RHeel", "RBigToe"],
     "Feet StrikeL": ["LHeel", "LBigToe"],
-    "Pelvic Drop": [],
+    "Pelvic Drop": ["RHip", "LHip"],
     "Heel Whips": [],
-    "Parallel Legs": [],
+    "Parallel Legs": ["LKnee", "LHip", "RHip", "RKnee"],
 }

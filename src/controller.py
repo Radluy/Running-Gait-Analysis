@@ -137,20 +137,25 @@ def auto_sync(side_data: folderStruct, back_data: folderStruct):
     return id_dict
 
 
-def setup_highlight(frame_id: str, side_data: folderStruct, metric_name: str):
+def setup_highlight(frame_id: str, side_data: folderStruct, back_data: folderStruct, metric_name: str):
     #image dimensions
     image = Image.open(side_data.images[0])
     width, height = image.size
         
     #get frame dict by id
+    if metric_name in ["Pelvic Drop", "Parallel Legs"]:
+        data_set = back_data.data
+    else:
+        data_set = side_data.data
     corr_frame = None
-    for frame in side_data.data:
+    for frame in data_set:
         if frame["ID"] == int(frame_id):
             corr_frame = frame
             break
-    
+
     right_direction = utils.is_going_right(side_data.data)
     right_front = utils.right_leg_front(side_data.data, corr_frame)
+
     if metric_name in ["Knee Flexion", "Tibia Angle", "Feet Strike", "Hip Extension"]:
         if right_front:
             metric_name = metric_name + "R"

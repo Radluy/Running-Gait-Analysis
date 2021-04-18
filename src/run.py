@@ -332,11 +332,15 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.sideViewSlider.setValue(id_dict["side"])
             self.backViewSlider.setValue(id_dict["back"])
         else:
-            self.syncOffset = None
+            self.syncOffset = None   
 
     def highlight_metric(self, metric):
+        if metric in ["Pelvic Drop", "Parallel Legs"]:
+            pixmap = self.backView.backViewLabel.pixmap()
+        else:
+            pixmap = self.sideView.sideViewLabel.pixmap()
         #painter setup
-        painter = QtGui.QPainter(self.sideView.sideViewLabel.pixmap())
+        painter = QtGui.QPainter(pixmap)
         pen = QtGui.QPen()
         pen.setWidth(6)
         pen.setColor(QtGui.QColor(255, 255, 255, 180))
@@ -350,7 +354,7 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 frame_id = radioButton.text()[7:]
                 break
 
-        points = controller.setup_highlight(frame_id, SIDE_FILE_STRUCT, metric)
+        points = controller.setup_highlight(frame_id, SIDE_FILE_STRUCT, BACK_FILE_STRUCT, metric)
 
         painter.drawLine(points[0].x, points[0].y, points[1].x, points[1].y)
 
