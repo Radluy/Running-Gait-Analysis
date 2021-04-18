@@ -35,10 +35,10 @@
   <widget class="QPushButton" name="processButton">
    <property name="geometry">
     <rect>
-     <x>610</x>
+     <x>600</x>
      <y>390</y>
-     <width>101</width>
-     <height>31</height>
+     <width>100</width>
+     <height>30</height>
     </rect>
    </property>
    <property name="text">
@@ -372,14 +372,14 @@ p, li { white-space: pre-wrap; }
   <widget class="QCheckBox" name="syncCheckBox">
    <property name="geometry">
     <rect>
-     <x>620</x>
+     <x>610</x>
      <y>460</y>
-     <width>121</width>
+     <width>161</width>
      <height>21</height>
     </rect>
    </property>
    <property name="text">
-    <string>Synchronize</string>
+    <string>Manual Sync</string>
    </property>
   </widget>
   <widget class="QPushButton" name="sideVideoUploadButton">
@@ -482,8 +482,8 @@ p, li { white-space: pre-wrap; }
   <widget class="QComboBox" name="trajectoryPicker">
    <property name="geometry">
     <rect>
-     <x>625</x>
-     <y>510</y>
+     <x>610</x>
+     <y>550</y>
      <width>79</width>
      <height>23</height>
     </rect>
@@ -522,8 +522,8 @@ p, li { white-space: pre-wrap; }
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>630</x>
-     <y>490</y>
+     <x>610</x>
+     <y>530</y>
      <width>81</width>
      <height>16</height>
     </rect>
@@ -574,6 +574,22 @@ p, li { white-space: pre-wrap; }
      <width>26</width>
      <height>26</height>
     </size>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="autoSyncCheckBox">
+   <property name="geometry">
+    <rect>
+     <x>610</x>
+     <y>490</y>
+     <width>171</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Warning! this function is experimental and might not work correctly.</string>
+   </property>
+   <property name="text">
+    <string>Automatic Sync</string>
    </property>
   </widget>
  </widget>

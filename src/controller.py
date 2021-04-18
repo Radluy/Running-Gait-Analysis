@@ -5,9 +5,18 @@ from folderClass import folderStruct
 import metrics_lib
 import stance_detector as sd
 from estimator import estimate
+import sync
 
 
 def check_formal_reqs(path: str) -> bool:
+    """Checks formal requirements for directory like existance of necessary files
+
+    Args:
+        path (str): path to directory
+
+    Returns:
+        bool: True if the directory structure is valid, False otherwise
+    """
     json_exists = False
     images_exist = False
     video_exists = False
@@ -32,7 +41,15 @@ def check_formal_reqs(path: str) -> bool:
         return True
 
 
-def load_folder_struct(path):
+def load_folder_struct(path: str) -> folderStruct:
+    """Load directory into folderStruct class instance
+
+    Args:
+        path (str): path to directory
+
+    Returns:
+        folderStruct: instance of folderStruct or None if incorrect path is specified
+    """
     correct_struct = check_formal_reqs(path)
     if not correct_struct:
         print("log: Incorrect structure of directory!", file=sys.stderr)
@@ -41,12 +58,17 @@ def load_folder_struct(path):
     return struct
 
 
-# return new directory destination
-def call_estimator(path_to_video):
-    return estimate(path_to_video)
+def evaluate(side_data: folderStruct, back_data: folderStruct) -> dict:
+    """Apply metrics computations
 
+    Args:
+        side_data (folderStruct): data from side camera
+        back_data (folderStruct): data from posterior camera
 
-def evaluate(side_data, back_data):
+    Returns:
+        dict: dictionary where keys are metric names and 
+        values are dictionaries from corresponding metrics library methods 
+    """
     frames = sd.stance_detector(side_data, False)
     metric_values = {}
     ids = []
@@ -70,7 +92,16 @@ def evaluate(side_data, back_data):
     return metric_values
 
 
-def backend_setup(path1):
+def backend_setup(path1: str) -> folderStruct:
+    """Setup folderStruct instance for input video or directory
+
+    Args:
+        path1 (str): path to either video or directory
+
+    Returns:
+        folderStruct: folderStruct instance with loaded data corresponding to input
+        or None if path is not valid
+    """
     if os.path.isdir(path1):
         return load_folder_struct(path1)
     try:
@@ -79,7 +110,24 @@ def backend_setup(path1):
         print("log: File is not a video!", file=sys.stderr)
         return None
     if kind.mime[0:5] == "video":
-        new_path = call_estimator(path1)
+        new_path = estimate(path1)
         return load_folder_struct(new_path)
     else:
         return None
+
+
+def auto_sync(side_data: folderStruct, back_data: folderStruct):
+    chunks = sd.stance_detector(side_data, True)
+    if chunks[0][0]["StanceLeg"] == "Right":
+        leg = "L"
+    else:
+        leg = "R"
+
+    side_frame = sync.find_side_sync_point(side_data)
+    back_frame = sync.find_back_sync_point(back_data, leg)
+
+    id_dict = {}
+    id_dict["side"] = int(side_frame)
+    id_dict["back"] = int(back_frame)
+
+    return id_dict

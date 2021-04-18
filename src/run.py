@@ -320,6 +320,20 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
             self.syncOffset = None
 
+    def autoSync(self, button):
+        if SIDE_FILE_STRUCT is None or BACK_FILE_STRUCT is None:
+            button.setChecked(False)
+            return self.raisePopup("Both views needed for synchronization")
+        
+        if button.isChecked() == True:
+            self.syncCheckBox.setChecked(False)
+            id_dict = controller.auto_sync(SIDE_FILE_STRUCT.data, BACK_FILE_STRUCT.data)
+            self.syncOffset = id_dict["side"] - id_dict["back"]
+            self.sideViewSlider.setValue(id_dict["side"])
+            self.backViewSlider.setValue(id_dict["back"])
+        else:
+            self.syncOffset = None
+
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
@@ -376,6 +390,7 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.sideView.mediaPlayer.mediaStatusChanged.connect(
             self.sideView.cleanAfterVideo)
         self.syncCheckBox.stateChanged.connect(lambda:self.synchronizeViews(self.syncCheckBox))
+        self.autoSyncCheckBox.stateChanged.connect(lambda:self.autoSync(self.autoSyncCheckBox))
 
 
 if __name__ == "__main__":

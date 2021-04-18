@@ -92,7 +92,7 @@ def CoM_displacement(data: list, show_all: bool) -> dict:
             displacement_degree = 180 - displacement_degree
         if show_all:
             degree_dict[frame["ID"]] = displacement_degree
-        elif displacement_degree < FILTER and displacement_degree > 20:
+        elif displacement_degree < FILTER and displacement_degree > MAX_VAL:
             degree_dict[frame["ID"]] = displacement_degree
         tmp_frame = frame
     return degree_dict
@@ -245,7 +245,7 @@ def hip_extension(data: list, show_all: bool) -> dict:
         max_angle_id = max(knee_dict.items(), key=operator.itemgetter(1))[0]
         if show_all:
             angle_dict[max_angle_id] = tmp_angles[max_angle_id]
-        elif tmp_angles[max_angle_id] < 10:
+        elif tmp_angles[max_angle_id] < MIN_VAL:
             angle_dict[max_angle_id] = tmp_angles[max_angle_id]
     return angle_dict
 

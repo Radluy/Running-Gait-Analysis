@@ -172,9 +172,9 @@ Metrics descriptions
 
 loading icon while estimator running
 
-parallel thighs metrics
-
 paint on frame select - coordinates
+
+auto/manual sync
 
 OPENPOSE -> call after install models/getBaseModels.bat
 ### OpenPose setup
