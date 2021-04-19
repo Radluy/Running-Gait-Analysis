@@ -33,7 +33,6 @@ class SideView(QtWidgets.QWidget):
         self.setAcceptDrops(True)
         self.layout = QtWidgets.QHBoxLayout()
         self.sideViewLabel = QtWidgets.QLabel()
-
         self.sideViewLabel.move(5, 10)
         self.setGeometry(5, 10, 640, 360)
 
@@ -301,6 +300,7 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             return self.raisePopup("Both views needed for synchronization")
 
         if button.isChecked() == True:
+            self.autoSyncCheckBox.setChecked(False)
             sideId = self.sideViewSlider.value()
             backId = self.backViewSlider.value()
             self.syncOffset = sideId - backId
@@ -366,14 +366,8 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.sideViewTrajectory.setStyleSheet("QLabel{ background-color: transparent;}")
         trajectory = QtGui.QPixmap(SIDE_FILE_STRUCT.trajectories[keypoint])
         self.sideViewTrajectory.move(5, 18)
-        #rect = self.sideView.sideViewLabel.rect()
-        #self.sideViewTrajectory.setGeometry(rect)
         self.sideViewTrajectory.setPixmap(trajectory)
         self.sideViewTrajectory.raise_()
-
-        #painter = QtGui.QPainter(pixmap2)
-        #trajectory = QtGui.QPixmap(SIDE_FILE_STRUCT.trajectories[keypoint])
-        #painter.drawPixmap(self.sideView.rect(), trajectory, trajectory.rect())
 
     def hide_trajectory(self):
         self.trajectoryPicker.setCurrentIndex(0)

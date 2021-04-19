@@ -147,20 +147,21 @@ def auto_sync(side_data: folderStruct, back_data: folderStruct)-> dict:
 
 
 def setup_highlight(frame_id: str, side_data: folderStruct, back_data: folderStruct, metric_name: str):
-    #image dimensions
-    image = Image.open(side_data.images[0])
-    width, height = image.size
         
     #get frame dict by id
     if metric_name in ["Pelvic Drop", "Parallel Legs"]:
-        data_set = back_data.data
+        data_set = back_data
     else:
-        data_set = side_data.data
+        data_set = side_data
     corr_frame = None
-    for frame in data_set:
+    for frame in data_set.data:
         if frame["ID"] == int(frame_id):
             corr_frame = frame
             break
+
+    #image dimensions
+    image = Image.open(data_set.images[0])
+    width, height = image.size
 
     right_direction = utils.is_going_right(side_data.data)
     right_front = utils.right_leg_front(side_data.data, corr_frame)
@@ -189,19 +190,4 @@ def setup_highlight(frame_id: str, side_data: folderStruct, back_data: folderStr
     return points
 
 
-def setup_trajectory(side_data: folderStruct, keypoint: str):
-    image = Image.open(side_data.images[0])
-    width, height = image.size
-
-    points = []
-    for frame in side_data.data:
-        point = frame[keypoint]
-        if point.x == 0 or point.y == 0:
-            continue
-        new_point = Keypoint()
-        new_point.x = int(point.x/width*640)
-        new_point.y = int(point.y/height*360)
-        points.append(new_point)
-    
-    return points
         
