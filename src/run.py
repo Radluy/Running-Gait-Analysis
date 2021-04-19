@@ -32,8 +32,8 @@ class SideView(QtWidgets.QWidget):
         self.video_url = None
         self.setAcceptDrops(True)
         self.layout = QtWidgets.QHBoxLayout()
-        self.trajectoryLayout = QtWidgets.QHBoxLayout()
         self.sideViewLabel = QtWidgets.QLabel()
+
         self.sideViewLabel.move(5, 10)
         self.setGeometry(5, 10, 640, 360)
 
@@ -71,20 +71,7 @@ class SideView(QtWidgets.QWidget):
         opener.setFileMode(QtWidgets.QFileDialog.Directory)
         self.video_url = str(
             opener.getExistingDirectory(self, "Select Directory"))
-
-    def drawTrajectory(self, value):
-        global SIDE_FILE_STRUCT
-        if SIDE_FILE_STRUCT == None:
-            return
-
-        self.trajectoryLabel = QtWidgets.QLabel()
-        pixmap = QtGui.QPixmap(SIDE_FILE_STRUCT.trajectories[value])
-        self.trajectoryLabel.setPixmap(pixmap)
-        self.trajectoryLayout.addWidget(self.trajectoryLabel, 0)
-        self.trajectoryLabel.setGeometry(QtCore.QRect(5, 10, 640, 360))
-        self.trajectoryLabel.move(self.geometry().topLeft())
-        self.trajectoryLabel.raise_()
-
+        
     def play_video(self):
         global SIDE_FILE_STRUCT
         if SIDE_FILE_STRUCT is None:
@@ -366,6 +353,32 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         
         painter.end()
 
+    def drawTrajectory(self):
+        if SIDE_FILE_STRUCT is None:
+            self.raisePopup("Import your video first!")
+            return
+        keypoint = self.trajectoryPicker.currentText()
+        if keypoint == "None":
+            self.hide_trajectory()
+            self.sideViewTrajectory.setPixmap(QtGui.QPixmap())
+            return
+        
+        self.sideViewTrajectory.setStyleSheet("QLabel{ background-color: transparent;}")
+        trajectory = QtGui.QPixmap(SIDE_FILE_STRUCT.trajectories[keypoint])
+        self.sideViewTrajectory.move(5, 18)
+        #rect = self.sideView.sideViewLabel.rect()
+        #self.sideViewTrajectory.setGeometry(rect)
+        self.sideViewTrajectory.setPixmap(trajectory)
+        self.sideViewTrajectory.raise_()
+
+        #painter = QtGui.QPainter(pixmap2)
+        #trajectory = QtGui.QPixmap(SIDE_FILE_STRUCT.trajectories[keypoint])
+        #painter.drawPixmap(self.sideView.rect(), trajectory, trajectory.rect())
+
+    def hide_trajectory(self):
+        self.trajectoryPicker.setCurrentIndex(0)
+        self.sideViewTrajectory.lower()
+
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
@@ -395,6 +408,7 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.processButton.clicked.connect(self.loadData)
         self.processButton.clicked.connect(self.setSideSliderLength)
         self.processButton.clicked.connect(self.hideRadioButtons)
+        self.processButton.clicked.connect(self.hide_trajectory)
         self.processButton.clicked.connect(self.cleanText)
         self.processButton.clicked.connect(self.sideView.set_placeholder)
         self.processButton.clicked.connect(self.backView.set_placeholder)
@@ -415,10 +429,11 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.backVideoUploadButton.clicked.connect(self.backView.uploadVideo)
         self.backDataUploadButton.clicked.connect(self.backView.uploadData)
         self.trajectoryPicker.currentTextChanged.connect(
-            self.sideView.drawTrajectory)
+            self.drawTrajectory)
         self.playBackVideoButton.clicked.connect(self.backView.play_video)
         self.backView.mediaPlayer.mediaStatusChanged.connect(
             self.backView.cleanAfterVideo)
+        self.playSideVideoButton.clicked.connect(self.hide_trajectory)
         self.playSideVideoButton.clicked.connect(self.sideView.play_video)
         self.sideView.mediaPlayer.mediaStatusChanged.connect(
             self.sideView.cleanAfterVideo)

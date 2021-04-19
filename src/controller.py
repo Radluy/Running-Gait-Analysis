@@ -120,7 +120,16 @@ def backend_setup(path1: str) -> folderStruct:
         return None
 
 
-def auto_sync(side_data: folderStruct, back_data: folderStruct):
+def auto_sync(side_data: folderStruct, back_data: folderStruct)-> dict:
+    """Calls automatic synchronization module to determine sync points
+
+    Args:
+        side_data (folderStruct): folderStruct instance with data from side camera
+        back_data (folderStruct): folderStruct instance with data from posterior camera
+
+    Returns:
+        [dict]: dictionary with frame IDs of the sync point from both views
+    """
     chunks = sd.stance_detector(side_data, True)
     if chunks[0][0]["StanceLeg"] == "Right":
         leg = "L"
@@ -167,8 +176,6 @@ def setup_highlight(frame_id: str, side_data: folderStruct, back_data: folderStr
         else:
             metric_name = metric_name + "L"
     
-    #elif metric in 
-    
     #determine points on canvas
     keypoints = corresponding_keypoints[metric_name]
     points = []
@@ -180,3 +187,21 @@ def setup_highlight(frame_id: str, side_data: folderStruct, back_data: folderStr
         points.append(new_point)
     
     return points
+
+
+def setup_trajectory(side_data: folderStruct, keypoint: str):
+    image = Image.open(side_data.images[0])
+    width, height = image.size
+
+    points = []
+    for frame in side_data.data:
+        point = frame[keypoint]
+        if point.x == 0 or point.y == 0:
+            continue
+        new_point = Keypoint()
+        new_point.x = int(point.x/width*640)
+        new_point.y = int(point.y/height*360)
+        points.append(new_point)
+    
+    return points
+        

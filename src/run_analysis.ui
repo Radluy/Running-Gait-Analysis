@@ -490,6 +490,11 @@ p, li { white-space: pre-wrap; }
    </property>
    <item>
     <property name="text">
+     <string>None</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
      <string>RKnee</string>
     </property>
    </item>
@@ -590,6 +595,22 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="text">
     <string>Automatic Sync</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="sideViewTrajectory">
+   <property name="geometry">
+    <rect>
+     <x>5</x>
+     <y>10</y>
+     <width>640</width>
+     <height>340</height>
+    </rect>
+   </property>
+   <property name="autoFillBackground">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string/>
    </property>
   </widget>
  </widget>
