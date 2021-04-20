@@ -124,6 +124,11 @@
    </property>
    <item>
     <property name="text">
+     <string>None</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
      <string>Torso Lean</string>
     </property>
    </item>
@@ -378,6 +383,9 @@ p, li { white-space: pre-wrap; }
      <height>21</height>
     </rect>
    </property>
+   <property name="toolTip">
+    <string>After clicking this, the current frames will be set as synchronization point.</string>
+   </property>
    <property name="text">
     <string>Manual Sync</string>
    </property>
@@ -495,27 +503,27 @@ p, li { white-space: pre-wrap; }
    </item>
    <item>
     <property name="text">
-     <string>RKnee</string>
+     <string>Right Knee</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>LKnee</string>
+     <string>Left Knee</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>RAnkle</string>
+     <string>Right Ankle</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>LAnkle</string>
+     <string>Left Ankle</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>MidHip</string>
+     <string>Middle of hips</string>
     </property>
    </item>
    <item>

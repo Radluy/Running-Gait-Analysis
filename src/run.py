@@ -5,6 +5,7 @@ import controller
 from metric_description import description, corresponding_keypoints
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
+import time
 
 
 qtCreatorFile = "src/run_analysis.ui"
@@ -194,8 +195,10 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.raisePopup("Side View required!")
             return
 
+        #self.raisePopup("Processing a video may take up to a few minutes!\nIn the meantime, go make yourself a cup of coffee :)")
+        #time.sleep(3)
         SIDE_FILE_STRUCT = controller.backend_setup(self.sideView.video_url)
-
+        
         if SIDE_FILE_STRUCT is None:
             self.raisePopup("Incorrect file or folder!")
             self.sideView.set_placeholder()
@@ -229,6 +232,11 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.metricDescriptionText.setText("")
         chosen_metric = self.metricSelectComboBox.currentText()
+
+        if chosen_metric == "None":
+            self.hideRadioButtons()
+            return
+        
         self.hideRadioButtons()
 
         try:

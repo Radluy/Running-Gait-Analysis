@@ -4,6 +4,14 @@ from trajectory import plot_keypoint_trajectory
 
 
 keypoints = ["RKnee", "LKnee", "LAnkle", "RAnkle", "Neck", "MidHip"]
+keypoint_map = {
+    "RKnee": "Right Knee",
+    "LKnee": "Left Knee",
+    "Neck": "Neck",
+    "MidHip": "Middle of hips",
+    "RAnkle": "Right Ankle",
+    "LAnkle": "Left Ankle",
+}
 
 class folderStruct():
 
@@ -36,7 +44,7 @@ class folderStruct():
         for file in trajectory_list:
             for keypoint in keypoints:
                 if file.find(keypoint) != -1:
-                    self.trajectories[keypoint] = (os.path.join(trajectory_dir, file))
+                    self.trajectories[keypoint_map[keypoint]] = (os.path.join(trajectory_dir, file))
                     break
         
         
