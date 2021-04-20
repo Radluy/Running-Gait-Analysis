@@ -147,9 +147,14 @@ class Worker(QtCore.QObject):
         super(Worker, self).__init__(parent)
         self.video_url = video
 
-    def run(self):
+    def run(self, view):
         global SIDE_FILE_STRUCT
-        SIDE_FILE_STRUCT = controller.backend_setup(self.video_url)
+        global BACK_FILE_STRUCT
+
+        if view == "side":
+            SIDE_FILE_STRUCT = controller.backend_setup(self.video_url)
+        elif view == "back":
+            BACK_FILE_STRUCT = controller.backend_setup(self.video_url)
         self.finished.emit()
 
 
@@ -201,11 +206,6 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.syncOffset != None:
             self.sideViewSlider.setValue(self.backViewSlider.value() + self.syncOffset)
 
-    def estimating_wait(self, thread):
-        while thread.is_alive():
-            print("waiting...")
-            time.sleep(3)
-
     def loadData(self):
         global SIDE_FILE_STRUCT
         global BACK_FILE_STRUCT
@@ -216,11 +216,18 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.thread = QtCore.QThread()
         self.worker = Worker(self.sideView.video_url)
         self.worker.moveToThread(self.thread)
-        self.thread.started.connect(self.worker.run)
-        self.worker.finished.connect(self.thread.quit)
-        self.worker.finished.connect(self.worker.deleteLater)
-        self.thread.finished.connect(self.thread.deleteLater)
+        self.thread.started.connect(lambda:self.worker.run("side"))
+
+        self.worker.finished.connect(self.setSideSliderLength)
+        self.worker.finished.connect(self.hideRadioButtons)
+        self.worker.finished.connect(self.hide_trajectory)
+        self.worker.finished.connect(self.cleanText)
         self.worker.finished.connect(self.finish_loading)
+
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.worker.finished.connect(self.thread.quit)
+        self.thread.finished.connect(self.thread.deleteLater)
+
         self.thread.start()
 
     def finish_loading(self):
@@ -235,31 +242,37 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             return
 
         try:
-            self.thread = QtCore.QThread()
             self.worker2 = Worker(self.backView.video_url)
-            self.worker2.moveToThread(self.thread)
-            self.thread.started.connect(self.worker2.run)
-            self.worker2.finished.connect(self.thread.quit)
-            self.worker2.finished.connect(self.worker2.deleteLater)
-            self.thread.finished.connect(self.thread.deleteLater)
-            self.worker2.finished.connect(self.end_loading)
-            self.thread.start()
         except:
             SIDE_FILE_STRUCT.metric_values = controller.evaluate(
                 SIDE_FILE_STRUCT.data, None)
-            self.raisePopup("Loading finished!")
+            return
+            #self.raisePopup("Loading finished!")
+        
+        self.thread2 = QtCore.QThread()
+        self.worker2.moveToThread(self.thread2)
+        self.thread2.started.connect(lambda:self.worker2.run("back"))
+
+        self.worker2.finished.connect(self.setSideSliderLength)
+        self.worker2.finished.connect(self.setBackSliderLength)
+        self.worker2.finished.connect(self.hideRadioButtons)
+        self.worker2.finished.connect(self.hide_trajectory)
+        self.worker2.finished.connect(self.cleanText)
+        self.worker2.finished.connect(self.end_loading)
+
+        self.worker2.finished.connect(self.worker2.deleteLater)
+        self.worker2.finished.connect(self.thread2.quit)
+        self.thread2.finished.connect(self.thread2.deleteLater)
+
+        self.thread.start()
 
     def end_loading(self):
         global SIDE_FILE_STRUCT
         global BACK_FILE_STRUCT
-
         SIDE_FILE_STRUCT.metric_values = controller.evaluate(
             SIDE_FILE_STRUCT.data, BACK_FILE_STRUCT.data)
 
-        self.raisePopup("Loading finished!")
-
-    def thread_cleanup(self):
-        pass
+        #self.raisePopup("Loading finished!")
 
     def hideRadioButtons(self):
         items = (self.radioLayout.itemAt(i).widget()
@@ -455,14 +468,14 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def setSignals(self):
         self.processButton.clicked.connect(self.loadData)
-        self.processButton.clicked.connect(self.setSideSliderLength)
-        self.processButton.clicked.connect(self.hideRadioButtons)
-        self.processButton.clicked.connect(self.hide_trajectory)
-        self.processButton.clicked.connect(self.cleanText)
+        #self.processButton.clicked.connect(self.setSideSliderLength)
+        #self.processButton.clicked.connect(self.hideRadioButtons)
+        #self.processButton.clicked.connect(self.hide_trajectory)
+        #self.processButton.clicked.connect(self.cleanText)
+        #self.processButton.clicked.connect(self.setBackSliderLength)
         self.processButton.clicked.connect(self.sideView.set_placeholder)
         self.processButton.clicked.connect(self.backView.set_placeholder)
         self.sideViewSlider.valueChanged.connect(self.setSideViewImage)
-        self.processButton.clicked.connect(self.setBackSliderLength)
         self.backViewSlider.valueChanged.connect(self.setBackViewImage)
         self.metricSelectComboBox.activated.connect(self.chosenMetric)
         items = (self.radioLayout.itemAt(i).widget()
