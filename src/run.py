@@ -6,6 +6,7 @@ from metric_description import description, corresponding_keypoints
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 import time
+import threading
 
 
 qtCreatorFile = "src/run_analysis.ui"
@@ -140,6 +141,18 @@ class BackView(QtWidgets.QWidget):
             self.stack.setCurrentIndex(0)
 
 
+class Worker(QtCore.QObject):
+    finished = QtCore.pyqtSignal()
+    def __init__(self, video, parent=None):
+        super(Worker, self).__init__(parent)
+        self.video_url = video
+
+    def run(self):
+        global SIDE_FILE_STRUCT
+        SIDE_FILE_STRUCT = controller.backend_setup(self.video_url)
+        self.finished.emit()
+
+
 class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def setSideSliderLength(self):
@@ -188,6 +201,11 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.syncOffset != None:
             self.sideViewSlider.setValue(self.backViewSlider.value() + self.syncOffset)
 
+    def estimating_wait(self, thread):
+        while thread.is_alive():
+            print("waiting...")
+            time.sleep(3)
+
     def loadData(self):
         global SIDE_FILE_STRUCT
         global BACK_FILE_STRUCT
@@ -195,10 +213,21 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.raisePopup("Side View required!")
             return
 
-        #self.raisePopup("Processing a video may take up to a few minutes!\nIn the meantime, go make yourself a cup of coffee :)")
-        #time.sleep(3)
-        SIDE_FILE_STRUCT = controller.backend_setup(self.sideView.video_url)
-        
+        self.thread = QtCore.QThread()
+        self.worker = Worker(self.sideView.video_url)
+        self.worker.moveToThread(self.thread)
+        self.thread.started.connect(self.worker.run)
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.worker.finished.connect(self.finish_loading)
+        self.thread.start()
+
+    def finish_loading(self):
+
+        global SIDE_FILE_STRUCT
+        global BACK_FILE_STRUCT
+
         if SIDE_FILE_STRUCT is None:
             self.raisePopup("Incorrect file or folder!")
             self.sideView.set_placeholder()
@@ -206,14 +235,31 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             return
 
         try:
-            BACK_FILE_STRUCT = controller.backend_setup(
-                self.backView.video_url)
+            self.thread = QtCore.QThread()
+            self.worker2 = Worker(self.backView.video_url)
+            self.worker2.moveToThread(self.thread)
+            self.thread.started.connect(self.worker2.run)
+            self.worker2.finished.connect(self.thread.quit)
+            self.worker2.finished.connect(self.worker2.deleteLater)
+            self.thread.finished.connect(self.thread.deleteLater)
+            self.worker2.finished.connect(self.end_loading)
+            self.thread.start()
         except:
             SIDE_FILE_STRUCT.metric_values = controller.evaluate(
                 SIDE_FILE_STRUCT.data, None)
-            return
+            self.raisePopup("Loading finished!")
+
+    def end_loading(self):
+        global SIDE_FILE_STRUCT
+        global BACK_FILE_STRUCT
+
         SIDE_FILE_STRUCT.metric_values = controller.evaluate(
             SIDE_FILE_STRUCT.data, BACK_FILE_STRUCT.data)
+
+        self.raisePopup("Loading finished!")
+
+    def thread_cleanup(self):
+        pass
 
     def hideRadioButtons(self):
         items = (self.radioLayout.itemAt(i).widget()
@@ -362,24 +408,25 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         painter.end()
 
     def drawTrajectory(self):
-        if SIDE_FILE_STRUCT is None:
-            self.raisePopup("Import your video first!")
-            return
         keypoint = self.trajectoryPicker.currentText()
         if keypoint == "None":
             self.hide_trajectory()
             self.sideViewTrajectory.setPixmap(QtGui.QPixmap())
+            return
+
+        if SIDE_FILE_STRUCT is None:
+            self.raisePopup("Import your video first!")
             return
         
         self.sideViewTrajectory.setStyleSheet("QLabel{ background-color: transparent;}")
         trajectory = QtGui.QPixmap(SIDE_FILE_STRUCT.trajectories[keypoint])
         self.sideViewTrajectory.move(5, 18)
         self.sideViewTrajectory.setPixmap(trajectory)
-        self.sideViewTrajectory.raise_()
+        self.sideViewTrajectory.setHidden(False)
 
     def hide_trajectory(self):
         self.trajectoryPicker.setCurrentIndex(0)
-        self.sideViewTrajectory.lower()
+        self.sideViewTrajectory.setHidden(True)
 
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
