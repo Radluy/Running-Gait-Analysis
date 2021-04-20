@@ -38,15 +38,10 @@ def plot_keypoint_trajectory(data: list, joint: str, image_path: str, save_path:
     plt.ylim(bottom=0, top=height)
     plt.axis('off')
 
-    # print image as background
-    #image = ImageOps.flip(image)
-    #plt.imshow(image)
-
-    #plt.show()
     fig.tight_layout()
     fig.savefig(os.path.join(save_path,'{}_trajectory.png'.format(joint)), transparent=True)
 
 
 if __name__ == "__main__":
     data = jl.load_json(sys.argv[1])
-    plot_keypoint_trajectory(data, "RKnee", sys.argv[2])
+    plot_keypoint_trajectory(data, "RKnee", sys.argv[2], os.getcwd())
