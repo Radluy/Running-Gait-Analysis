@@ -166,15 +166,9 @@ https://github.com/CMU-Perceptual-Computing-Lab/openpose/blob/master/doc/advance
 
 openpose accuracy testing -> stickers
 
-trajectory integration
-
 Metrics descriptions
 
 loading icon while estimator running
-
-paint on frame select - coordinates
-
-auto/manual sync
 
 OPENPOSE -> call after install models/getBaseModels.bat
 ### OpenPose setup
@@ -183,3 +177,5 @@ OPENPOSE -> call after install models/getBaseModels.bat
 > unzip openpose-1.7.0-binaries-win64-cpu-python3.7-flir-3d.zip
 
 > openpose/models/getBaseModels.bat
+
+writefull
