@@ -91,6 +91,7 @@ class BackView(QtWidgets.QWidget):
 
     def __init__(self, parent=None):
         super(BackView, self).__init__(parent)
+        self.video_url = None
         self.setAcceptDrops(True)
         self.layout = QtWidgets.QHBoxLayout()
         self.backViewLabel = QtWidgets.QLabel()
@@ -143,18 +144,34 @@ class BackView(QtWidgets.QWidget):
 
 class Worker(QtCore.QObject):
     finished = QtCore.pyqtSignal()
-    def __init__(self, video, parent=None):
+    failed = QtCore.pyqtSignal()
+    def __init__(self, side_video, back_video, parent=None):
         super(Worker, self).__init__(parent)
-        self.video_url = video
+        self.side_video = side_video
+        self.back_video = back_video
 
-    def run(self, view):
+    def run(self):
         global SIDE_FILE_STRUCT
         global BACK_FILE_STRUCT
 
-        if view == "side":
-            SIDE_FILE_STRUCT = controller.backend_setup(self.video_url)
-        elif view == "back":
-            BACK_FILE_STRUCT = controller.backend_setup(self.video_url)
+        SIDE_FILE_STRUCT = controller.backend_setup(self.side_video)
+
+        if SIDE_FILE_STRUCT is None:
+            self.failed.emit()
+            return
+
+        if self.back_video is not None:
+            BACK_FILE_STRUCT = controller.backend_setup(self.back_video)
+
+        if BACK_FILE_STRUCT is None:
+            SIDE_FILE_STRUCT.metric_values = controller.evaluate(
+                SIDE_FILE_STRUCT.data, None)
+            self.finished.emit()
+            return
+        else:
+            SIDE_FILE_STRUCT.metric_values = controller.evaluate(
+            SIDE_FILE_STRUCT.data, BACK_FILE_STRUCT.data)
+
         self.finished.emit()
 
 
@@ -214,23 +231,33 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             return
 
         self.thread = QtCore.QThread()
-        self.worker = Worker(self.sideView.video_url)
+        self.worker = Worker(self.sideView.video_url, self.backView.video_url)
         self.worker.moveToThread(self.thread)
-        self.thread.started.connect(lambda:self.worker.run("side"))
+        self.thread.started.connect(lambda:self.worker.run())
 
         self.worker.finished.connect(self.setSideSliderLength)
+        self.worker.finished.connect(self.setBackSliderLength)
         self.worker.finished.connect(self.hideRadioButtons)
         self.worker.finished.connect(self.hide_trajectory)
         self.worker.finished.connect(self.cleanText)
-        self.worker.finished.connect(self.finish_loading)
+        #self.worker.finished.connect(self.finish_loading)
 
         self.worker.finished.connect(self.worker.deleteLater)
         self.worker.finished.connect(self.thread.quit)
         self.thread.finished.connect(self.thread.deleteLater)
 
+        self.worker.failed.connect(self.bad_input)
+        self.worker.failed.connect(self.worker.deleteLater)
+        self.worker.failed.connect(self.thread.quit)
+
         self.thread.start()
 
-    def finish_loading(self):
+    def bad_input(self):
+        self.raisePopup("Incorrect file or folder!")
+        self.sideView.set_placeholder()
+        self.sideLabel.setText("SIDE VIEW - FRAME: ")
+
+    """def finish_loading(self):
 
         global SIDE_FILE_STRUCT
         global BACK_FILE_STRUCT
@@ -241,9 +268,9 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.sideLabel.setText("SIDE VIEW - FRAME: ")
             return
 
-        try:
+        if self.backView.video_url is not None:
             self.worker2 = Worker(self.backView.video_url)
-        except:
+        else:
             SIDE_FILE_STRUCT.metric_values = controller.evaluate(
                 SIDE_FILE_STRUCT.data, None)
             return
@@ -272,7 +299,7 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         SIDE_FILE_STRUCT.metric_values = controller.evaluate(
             SIDE_FILE_STRUCT.data, BACK_FILE_STRUCT.data)
 
-        #self.raisePopup("Loading finished!")
+        #self.raisePopup("Loading finished!")"""
 
     def hideRadioButtons(self):
         items = (self.radioLayout.itemAt(i).widget()
@@ -452,6 +479,8 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setBackSliderLength()
         self.hideRadioButtons()
         self.syncOffset = None
+        self.sideViewTrajectory.setHidden(True)
+        self.sideViewTrajectory.raise_()
         self.sideVideoUploadButton.setIcon(
             QtGui.QIcon('src/images/video_upload2.png'))
         self.sideDataUploadButton.setIcon(
