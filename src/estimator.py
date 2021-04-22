@@ -1,19 +1,11 @@
 import subprocess
 import os
+import threading
 
 
 openpose_path = "openpose"
 
-
 def estimate(video_path: str) -> str:
-    """Setup input/output paths for OpenPose and call the estimator as powershell subprocess
-
-    Args:
-        video_path (str): path to video input for estimator
-
-    Returns:
-        str: path to directory with estimator output
-    """    
     file_name = os.path.basename(video_path)
     file_name = os.path.splitext(file_name)[0]
     directory = os.path.join(os.getcwd(), "./outputs/{}".format(file_name))
@@ -33,3 +25,4 @@ def estimate(video_path: str) -> str:
         print(result2.stdout)
 
     return directory
+
