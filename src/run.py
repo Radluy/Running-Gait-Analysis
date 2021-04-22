@@ -339,7 +339,8 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         global SIDE_FILE_STRUCT
         curr_metric = self.metricSelectComboBox.currentText()
         try:
-            angle = SIDE_FILE_STRUCT.metric_values[curr_metric][int(ID)]
+            full_angle = SIDE_FILE_STRUCT.metric_values[curr_metric][int(ID)]
+            angle = round(full_angle, 2)
         except:
             return
         self.metricDescriptionText.setText("{descrip}\n\nAngle = {angle}".format(
