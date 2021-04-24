@@ -29,9 +29,17 @@ class folderStruct():
         image_dir = os.path.join(path, "images")
         image_list = os.listdir(image_dir)
         # crop empty images
-        cropped_image_list = image_list[first_frame:len(self.data)+first_frame]
-        for file in cropped_image_list:
-            self.images.append(os.path.join(image_dir,file))
+        cropped_image_list = image_list[first_frame:]
+        last = first_frame
+        iterator = 0
+        for frame in self.data[1:]:
+            frame_id = frame["ID"]
+            offset = frame_id - last
+            if offset > 1:
+                iterator += offset - 1 
+            last = frame_id
+            self.images.append(os.path.join(image_dir,cropped_image_list[iterator]))
+            iterator += 1
         self.images.sort()
 
         trajectory_dir = os.path.join(path, "trajectories")

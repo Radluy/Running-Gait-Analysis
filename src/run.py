@@ -28,7 +28,8 @@ class popup(QtWidgets.QWidget):
         self.layout.addWidget(self.label)
         self.layout.addWidget(self.button)
         self.setLayout(self.layout)
-        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+
+        #self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         #self.setStyleSheet("border : 2px solid black;")
 
 
@@ -230,7 +231,20 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def processingVideoGif(self):
         self.processButton.setEnabled(False)
-        self.loading_gif = QtGui.QMovie("src/images/Loading3.gif")
+        self.sideViewSlider.setEnabled(False)
+        self.backViewSlider.setEnabled(False)
+        self.trajectoryPicker.setEnabled(False)
+        self.metricSelectComboBox.setCurrentIndex(0)
+        self.metricSelectComboBox.setEnabled(False)
+        self.syncCheckBox.setEnabled(False)
+        self.autoSyncCheckBox.setEnabled(False)
+        self.sideVideoUploadButton.setEnabled(False)
+        self.sideDataUploadButton.setEnabled(False)
+        self.playSideVideoButton.setEnabled(False)
+        self.backVideoUploadButton.setEnabled(False)
+        self.backDataUploadButton.setEnabled(False)
+        self.playBackVideoButton.setEnabled(False)
+        self.loading_gif = QtGui.QMovie("src/images/Loading2.gif")
 
         self.sideView.sideViewLabel.setMovie(self.loading_gif)
         self.backView.backViewLabel.setMovie(self.loading_gif)
@@ -242,6 +256,12 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.sideView.set_placeholder()
         self.backView.set_placeholder()
         self.processButton.setEnabled(True)
+        self.sideViewSlider.setEnabled(True)
+        self.backViewSlider.setEnabled(True)
+        self.trajectoryPicker.setEnabled(True)
+        self.metricSelectComboBox.setEnabled(True)
+        self.syncCheckBox.setEnabled(True)
+        self.autoSyncCheckBox.setEnabled(True)
         self.raisePopup("Processing finished!")
 
     def loadData(self):
@@ -363,17 +383,16 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def raisePopup(self, text):
         self.popup = popup(text)
-        desktopRect = QtWidgets.QApplication.desktop().availableGeometry()
-        center = desktopRect.center()
-        popup_geo = self.popup.frameGeometry()
-        self.popup.setGeometry(QtCore.QRect(center.x(), center.y(), 200, 100))
-        #self.popup.move(center.x() - popup_geo.width() * 0.5, center.y() - popup_geo.height() * 0.5)
+
+        centerPoint = QtWidgets.QDesktopWidget().availableGeometry().center()
+        self.popup.move(centerPoint.x() - (self.popup.width() * 0.5), centerPoint.y() - (self.popup.height() * 0.5))
+
         self.popup.show()
 
     def synchronizeViews(self, button):
         if not SIDE_FILE_STRUCT or not BACK_FILE_STRUCT:
             button.setChecked(False)
-            return self.raisePopup("Both views needed for synchronization")
+            return self.raisePopup("Both views needed\nfor synchronization.")
 
         if button.isChecked() == True:
             self.autoSyncCheckBox.setChecked(False)
@@ -386,7 +405,7 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def autoSync(self, button):
         if SIDE_FILE_STRUCT is None or BACK_FILE_STRUCT is None:
             button.setChecked(False)
-            return self.raisePopup("Both views needed for synchronization")
+            return self.raisePopup("Both views needed\nfor synchronization")
         
         if button.isChecked() == True:
             self.syncCheckBox.setChecked(False)
@@ -453,8 +472,8 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def closeEvent(self, event):
         try:
             if self.thread.isRunning():
-                self.thread.exit()
-        except AttributeError:
+                self.thread.quit()
+        except (AttributeError, RuntimeError):
             return
 
     def __init__(self):
