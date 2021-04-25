@@ -216,7 +216,6 @@ def hip_extension(data: list, show_all: bool) -> dict:
 
     for chunk in chunks:
         post_chunk_id = chunk[0]["ID"] + 1
-        post_frame = None
         list_pos = 0
         for frame in data:
             if frame["ID"] == post_chunk_id: # after stance
@@ -226,7 +225,10 @@ def hip_extension(data: list, show_all: bool) -> dict:
         tmp_angles = {}
         knee_dict = {}
         for pos in range(list_pos,list_pos+5): # 5 frames after stance
-            frame = data[pos]
+            try:
+                frame = data[pos]
+            except IndexError:
+                continue
             if chunk[0]["StanceLeg"] == "Right":
                 knee_angle = utils.angle_3points(frame["RAnkle"], frame["RKnee"], frame["RHip"])
                 knee_dict[frame["ID"]] = knee_angle

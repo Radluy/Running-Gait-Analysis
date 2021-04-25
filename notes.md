@@ -151,7 +151,6 @@ https://github.com/CMU-Perceptual-Computing-Lab/openpose/blob/master/doc/advance
 10. ears aligned with shoulders
 
 ## Consultation
-1. openpose integration
 
 ## QT Designer
 > /mnt/c/Users/rados/Documents/BP-repo/env/lib/python3.8/site-packages/qt5_applications/Qt/bin/designer
@@ -168,14 +167,41 @@ openpose accuracy testing -> stickers
 
 Metrics descriptions
 
-loading icon while estimator running
+## Sticker test
+base #38:
+1. LKnee: [1172,740]
+2. LAnkle: [1175,860]
+3. LElbow: [1260,518]
 
-OPENPOSE -> call after install models/getBaseModels.bat
-### OpenPose setup
-> wget https://github.com/CMU-Perceptual-Computing-Lab/openpose/releases/download/v1.7.0/openpose-1.7.0-binaries-win64-cpu-python3.7-flir-3d.zip
+estimator:
+1. LKnee: x: 1171.86, y: 733.353, confidence: 0.873029
+2. LAnkle: x: 1169.01, y: 862.926, confidence: 0.879125
+3. LElbow: x: 1260.26, y: 527.272, confidence: 0.921478
 
-> unzip openpose-1.7.0-binaries-win64-cpu-python3.7-flir-3d.zip
 
-> openpose/models/getBaseModels.bat
+base #47:
+1. LKnee: [940,738]
+2. LAnkle: [1045,794]
+3. LElbow: [880,525]
 
-writefull
+estimator:
+1. LKnee: x: 945.333, y: 733.43, confidence: 0.885528
+2. LAnkle: x: 1048.4, y: 795.17, confidence: 0.854546
+3. LElbow: x: 889.293, y: 530.283, confidence: 0.908806
+
+base 60:
+1. LKnee: [420,765]
+2. LAnkle: [391,884]
+3. LElbow: [506,532]
+
+estimator:
+1. LKnee: x: 424.363, y: 756.958, confidence: 0.854621
+2. LAnkle: x: 388.977, y: 892.309, confidence: 0.892356
+3. LElbow: x: 506.745, y: 533.261, confidence: 0.911413
+
+less than 10 pixels -> 0.5% accuracy
+
+## Stance detector test
+1. stances -> cycle
+2. break -> no bend run
+   

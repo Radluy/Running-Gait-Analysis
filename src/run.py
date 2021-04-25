@@ -262,6 +262,12 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.metricSelectComboBox.setEnabled(True)
         self.syncCheckBox.setEnabled(True)
         self.autoSyncCheckBox.setEnabled(True)
+        self.sideVideoUploadButton.setEnabled(True)
+        self.sideDataUploadButton.setEnabled(True)
+        self.playSideVideoButton.setEnabled(True)
+        self.backVideoUploadButton.setEnabled(True)
+        self.backDataUploadButton.setEnabled(True)
+        self.playBackVideoButton.setEnabled(True)
         self.raisePopup("Processing finished!")
 
     def loadData(self):
@@ -329,8 +335,8 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         try:
             vals = SIDE_FILE_STRUCT.metric_values[chosen_metric]
         except:
-            self.metricDescriptionText.setText(
-                "Back view needed for this metric!")
+            curr_metric = self.metricSelectComboBox.currentText()
+            self.metricDescriptionText.setText(description[curr_metric])
             return
 
         i = 0
