@@ -44,7 +44,6 @@ def find_back_sync_point(back_data: list, leg: str)-> int:
     Returns:
         int: ID of sync frame
     """
-    #distance = back_data[0][leg+"Knee"].y - back_data[0][leg+"Ankle"].y
     distance = sys.maxsize
     current_id = back_data[0]["ID"]
     for frame in back_data[1:]:
