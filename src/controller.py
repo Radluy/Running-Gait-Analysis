@@ -112,11 +112,16 @@ def backend_setup(path1: str) -> folderStruct:
         return load_folder_struct(path1)
         #data = load_folder_struct(path1)
         #return
+
     try:
         kind = filetype.guess(path1)
     except:
         print("log: File is not a video!", file=sys.stderr)
         return None
+
+    if kind is None:
+        return None
+        
     if kind.mime[0:5] == "video":
         new_path = estimate(path1)
         return load_folder_struct(new_path)
