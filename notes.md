@@ -201,7 +201,69 @@ estimator:
 
 less than 10 pixels -> 0.5% accuracy
 
+
+## Sync test
+1. side4 - back2 [WORKS] -> 18/26 - 11/19 - 20/28
+2. side_to_side [WORKS] 
+3. normal [3 frames off]
+4. forefoot [2 frames off]
+5. weird [9 frames off]
+
+## additional tests
+sync_side_3 -> [frame40] leg connection
+   
+
 ## Stance detector test
 1. stances -> cycle
 2. break -> no bend run
    
+1. .\outputs\forefoot_side\json
+Stances:
+[13, 21, 31, 32, 33, 42, 52, 53, 54, 55]
+[[13], [21], [31, 32, 33], [42], [52, 53, 54, 55]]
+
+2. .\outputs\high_knee_side\json
+Stances:
+[40, 42, 43, 44, 52, 59, 61, 62, 63, 71, 78, 81]
+[[40], [42, 43, 44], [52], [59], [61, 62, 63], [71], [78], [81]]
+
+3. .\outputs\normal_side\json
+Stances:
+[17, 18, 28, 39, 40, 49, 50, 51]
+[[17, 18], [28], [39, 40], [49, 50, 51]]
+
+4. .\outputs\no_bend_side\json
+Stances:
+[]
+[]
+
+5. .\outputs\side3\json
+Stances:
+[26, 35, 36, 37, 38, 46, 47, 56, 57, 58]
+[[26], [35, 36, 37, 38], [46, 47], [56, 57, 58]]
+
+6. .\outputs\side4\json
+Stances:
+[11, 12, 20, 21, 22, 23, 29, 31]
+[[11, 12], [20, 21, 22, 23], [29], [31]]
+
+7. .\outputs\side_to_side_side\json
+Stances:
+[29, 39, 40, 49, 50, 60, 61, 71]
+[[29], [39, 40], [49, 50], [60, 61], [71]]
+
+8. .\outputs\sticker_test_side\json
+Stances:
+[27, 28, 38, 39, 49, 50, 51, 62]
+[[27, 28], [38, 39], [49, 50, 51], [62]]
+
+9. .\outputs\sync_side1\json
+Stances:
+[30, 31, 32, 41, 42, 50, 51, 52]
+[[30, 31, 32], [41, 42], [50, 51, 52]]
+
+10. .\outputs\weird_side\json
+Stances:
+[19, 20, 30, 41, 50, 51, 52]
+[[19, 20], [30], [41], [50, 51, 52]]
+

@@ -3,6 +3,7 @@ import pprint
 import metrics_lib
 import sys
 import stance_detector as sd
+import os
 
 
 # data = [frame1, frame2, ..., frame n]
@@ -13,17 +14,19 @@ import stance_detector as sd
 #          head:  x,y
 #         }
 
-
 if __name__ == "__main__":
     data = jl.load_json(sys.argv[1])
     back_data = jl.load_json(sys.argv[2])
-    frames = sd.stance_detector(data, False)
+    frames = sd.stance_detector(data, True)
     pp = pprint.PrettyPrinter(indent=4)
 
     print("Stances:")
     ids = []
     for frame in frames:
-        ids.append(frame["ID"])
+        chunk = []
+        for f in frame:
+            chunk.append(f["ID"])
+        ids.append(chunk)
     pp.pprint(ids)
 
     print("\nTorso lean:")
