@@ -16,13 +16,14 @@ import os
 
 if __name__ == "__main__":
     data = jl.load_json(sys.argv[1])
-    back_data = jl.load_json(sys.argv[2])
-    frames = sd.stance_detector(data, True)
+    #back_data = jl.load_json(sys.argv[2])
+    frames = sd.stance_detector(data, False)
+    chunks = sd.stance_detector(data, True)
     pp = pprint.PrettyPrinter(indent=4)
 
     print("Stances:")
     ids = []
-    for frame in frames:
+    for frame in chunks:
         chunk = []
         for f in frame:
             chunk.append(f["ID"])
@@ -38,6 +39,9 @@ if __name__ == "__main__":
     print("\nTibia angle:")
     pp.pprint(metrics_lib.tibia_angle(data, False))
 
+    print("\nFeet strike:")
+    pp.pprint(metrics_lib.feet_strike(data, False))
+
     print("\nCenter of mass displacement:")
     pp.pprint(metrics_lib.CoM_displacement(data, False))
 
@@ -48,10 +52,10 @@ if __name__ == "__main__":
     pp.pprint(metrics_lib.hip_extension(data, False))
 
     print("\nPelvic drop:")
-    pp.pprint(metrics_lib.pelvic_drop(back_data, False))
+    #pp.pprint(metrics_lib.pelvic_drop(back_data, False))
 
     #print("\nHeel whips:")
     #pp.pprint(metrics_lib.heel_whips(back_data, False))
 
     print("\nParallel legs:")
-    pp.pprint(metrics_lib.parallel_legs(back_data, False))
+    #pp.pprint(metrics_lib.parallel_legs(back_data, False))

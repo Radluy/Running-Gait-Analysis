@@ -78,25 +78,39 @@ def CoM_displacement(data: list, show_all: bool) -> dict:
         show_all (bool): whether to return values for each frame or only irregular ones
 
     Returns:
-        dict: dictionary of frame IDs and corresponding CoM displacement angles compared to previous frame
+        dict: dictionary of frame IDs and corresponding CoM displacement angles compared to highest point in flight phase
     """
     FILTER = 80
-    MAX_VAL = 20
-    tmp_frame = data[0]
+    MAX_VAL = 5
     degree_dict = {}
+    chunks = sd.stance_detector(data, True)
     right_direction = utils.is_going_right(data)
-    for frame in data[1:]:
-        displacement_degree = abs(utils.angle_2points(
-            tmp_frame["MidHip"], frame["MidHip"]))
+
+    tmp = chunks[0]
+    for chunk in chunks[1:]:
+        sublist = []
+        #find indices
+        for frame,i in zip(data,range(len(data))):
+            if frame["ID"] == tmp[0]["ID"]:
+                start = i
+            if frame["ID"] == chunk[0]["ID"]:
+                end = i
+        #find highest point
+        for frame in data[start:end]:
+            sublist.append(frame["MidHip"].y)
+        top = start + sublist.index(max(sublist))
+
+        displacement_degree = abs(utils.angle_2points(tmp[0]["MidHip"], data[top]["MidHip"]))
         if right_direction:
             displacement_degree = 180 - displacement_degree
         if show_all:
-            degree_dict[frame["ID"]] = displacement_degree
+            degree_dict[tmp[0]["ID"]] = displacement_degree
         elif displacement_degree < FILTER and displacement_degree > MAX_VAL:
-            degree_dict[frame["ID"]] = displacement_degree
-        tmp_frame = frame
-    return degree_dict
+            degree_dict[tmp[0]["ID"]] = displacement_degree
 
+        tmp = chunk
+    return degree_dict
+        
 
 def knee_flexion(data: list, show_all: bool) -> dict:
     """Calculate maximum angle of knee flexion during stance phase
