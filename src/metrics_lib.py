@@ -81,7 +81,7 @@ def CoM_displacement(data: list, show_all: bool) -> dict:
         dict: dictionary of frame IDs and corresponding CoM displacement angles compared to highest point in flight phase
     """
     FILTER = 80
-    MAX_VAL = 5
+    MAX_VAL = 10
     degree_dict = {}
     chunks = sd.stance_detector(data, True)
     right_direction = utils.is_going_right(data)
@@ -94,19 +94,21 @@ def CoM_displacement(data: list, show_all: bool) -> dict:
             if frame["ID"] == tmp[0]["ID"]:
                 start = i
             if frame["ID"] == chunk[0]["ID"]:
-                end = i
+                end = i - 2
         #find highest point
         for frame in data[start:end]:
             sublist.append(frame["MidHip"].y)
+        if not sublist:
+            continue
         top = start + sublist.index(max(sublist))
 
         displacement_degree = abs(utils.angle_2points(tmp[0]["MidHip"], data[top]["MidHip"]))
         if right_direction:
             displacement_degree = 180 - displacement_degree
         if show_all:
-            degree_dict[tmp[0]["ID"]] = displacement_degree
+            degree_dict[data[top]["ID"]] = displacement_degree
         elif displacement_degree < FILTER and displacement_degree > MAX_VAL:
-            degree_dict[tmp[0]["ID"]] = displacement_degree
+            degree_dict[data[top]["ID"]] = displacement_degree
 
         tmp = chunk
     return degree_dict

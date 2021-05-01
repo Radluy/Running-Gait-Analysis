@@ -267,3 +267,4 @@ Stances:
 [19, 20, 30, 41, 50, 51, 52]
 [[19, 20], [30], [41], [50, 51, 52]]
 
+highkneeside -> frame70 forefoot strike detect
