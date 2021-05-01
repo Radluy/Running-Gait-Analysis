@@ -423,6 +423,7 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.syncOffset = None   
 
     def highlight_metric(self, metric):
+
         if metric in ["Pelvic Drop", "Parallel Legs"]:
             pixmap = self.backView.backViewLabel.pixmap()
         else:
@@ -435,12 +436,16 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         painter.setPen(pen)
 
         #get frame id from radiobox text
+        frame_id = None
         items = (self.radioLayout.itemAt(i).widget()
                  for i in range(self.radioLayout.count()))
         for radioButton in items:
             if radioButton.isChecked():
                 frame_id = radioButton.text()[7:]
                 break
+
+        if not frame_id:
+            return
 
         points = controller.setup_highlight(frame_id, SIDE_FILE_STRUCT, BACK_FILE_STRUCT, metric)
 

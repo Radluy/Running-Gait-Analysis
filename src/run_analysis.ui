@@ -154,12 +154,7 @@
    </item>
    <item>
     <property name="text">
-     <string>Pelvic Drop</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>Parallel Legs</string>
+     <string>Center of Mass Displacement</string>
     </property>
    </item>
    <item>
@@ -169,7 +164,7 @@
    </item>
    <item>
     <property name="text">
-     <string>Center of Mass Displacement</string>
+     <string>Pelvic Drop</string>
     </property>
    </item>
   </widget>

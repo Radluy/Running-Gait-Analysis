@@ -240,7 +240,7 @@ def hip_extension(data: list, show_all: bool) -> dict:
 
         tmp_angles = {}
         knee_dict = {}
-        for pos in range(list_pos,list_pos+5): # 5 frames after stance
+        for pos in range(list_pos,list_pos+7): # 7 frames after stance
             try:
                 frame = data[pos]
             except IndexError:
