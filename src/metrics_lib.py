@@ -175,7 +175,7 @@ def tibia_angle(data: list, show_all: bool) -> dict:
         if show_all:
             angle_dict[frame["ID"]] = angle
         elif right_direction and angle < 90:
-            angle_dict[frame["ID"]] = angle
+            angle_dict[frame["ID"]] = 180 - angle
         elif not right_direction and angle > 90:
             angle_dict[frame["ID"]] = angle
     return angle_dict

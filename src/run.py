@@ -29,9 +29,6 @@ class popup(QtWidgets.QWidget):
         self.layout.addWidget(self.button)
         self.setLayout(self.layout)
 
-        #self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        #self.setStyleSheet("border : 2px solid black;")
-
 
 class SideView(QtWidgets.QWidget):
 
@@ -295,9 +292,9 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.thread.finished.connect(self.thread.deleteLater)
         self.thread.finished.connect(self.endLoadingGif)
 
-        self.worker.failed.connect(self.bad_input)
-        self.worker.failed.connect(self.worker.deleteLater)
         self.worker.failed.connect(self.thread.quit)
+        self.worker.failed.connect(self.worker.deleteLater)
+        self.worker.failed.connect(self.bad_input)
 
         self.raisePopup("Processing a video might take several minutes.\n Go make yourself a cup of coffee in the meantime.")
         self.thread.start()
