@@ -110,8 +110,6 @@ def backend_setup(path1: str) -> folderStruct:
     """
     if os.path.isdir(path1):
         return load_folder_struct(path1)
-        #data = load_folder_struct(path1)
-        #return
 
     try:
         kind = filetype.guess(path1)
@@ -125,8 +123,6 @@ def backend_setup(path1: str) -> folderStruct:
     if kind.mime[0:5] == "video":
         new_path = estimate(path1)
         return load_folder_struct(new_path)
-        #data = load_folder_struct(new_path)
-        #return
     else:
         return None
 

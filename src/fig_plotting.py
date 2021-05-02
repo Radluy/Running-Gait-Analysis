@@ -114,6 +114,7 @@ def plot_stance_dist():
 
 
 if __name__ == "__main__":
+    plot_stats()
     plot_stances_num()
     plot_frames_per_stance()
     plot_stance_dist()

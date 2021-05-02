@@ -138,7 +138,6 @@ def knee_flexion(data: list, show_all: bool) -> dict:
                 angle = 180 - \
                     utils.angle_3points(
                         frame["LHip"], frame["LKnee"], frame["LAnkle"])
-            # print("{id}: {angle}".format(id=frame["ID"], angle=angle)) # debug
             angles[frame["ID"]] = angle
         max_angle_id = max(angles.items(), key=operator.itemgetter(1))[0]
         if show_all:

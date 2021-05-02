@@ -47,9 +47,7 @@ def find_back_sync_point(back_data: list, leg: str)-> int:
     distance = sys.maxsize
     current_id = back_data[0]["ID"]
     for frame in back_data[1:]:
-        # check for incomplete frames
-        #if frame[leg+"Knee"].y == 0 or frame[leg+"Ankle"].y == 0:
-        #    continue
+        
         if frame["RKnee"].confidence == 0 or frame["RAnkle"].confidence == 0 or \
            frame["LKnee"].confidence == 0 or frame["LAnkle"].confidence == 0 or \
            frame["LShoulder"].confidence == 0 or frame["RShoulder"].confidence == 0 or \
