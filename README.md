@@ -2,20 +2,31 @@
 Desktop application for evaluating your running technique from videos.
 
 ## Installation
-> python3 -m pip install -r requirements.txt
+```powershell
+python3 -m pip install -r requirements.txt
+```
 ### Windows:
-> ./setup.ps1
+```powershell
+./setup.ps1
+```
 ### Linux/MacOS:
-> TBD
+```powershell
+TBD
+```
 
 ## Run
 From root directory:
-> python3 src/run.py
+```powershell
+python3 src/run.py
+```
 
 ## Usage
 Uploading a video calls a pose estimator and the rendered results are saved to `uploads\` directory of the app's root folder.
 
 One directory in this folder represents one video and should be uploaded if it already exists.
+
+For optimal environment, follow the camera position guidelines that are demonstrated below.
+![Camera position](/src/images/camera_position.png)
 
 ## License
 
