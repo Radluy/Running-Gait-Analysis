@@ -20,6 +20,11 @@ From root directory:
 python3 src/run.py
 ```
 
+## Demo
+To try the application, just upload the directories stored in `examples\` or upload the video and wait for the estimator to render the outputs.
+
+![Camera position](/src/images/demo.gif)
+
 ## Usage
 Uploading a video calls a pose estimator and the rendered results are saved to `uploads\` directory of the app's root folder.
 
