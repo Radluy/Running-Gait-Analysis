@@ -17,6 +17,10 @@ Uploading a video calls a pose estimator and the rendered results are saved to `
 
 One directory in this folder represents one video and should be uploaded if it already exists.
 
+## License
+
+GNU General Public License v3.0
+
 ## Contact
 In case of any bugs or problems, do not hesitate to contact me.
 
