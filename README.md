@@ -3,7 +3,7 @@ Desktop application for evaluating your running technique from videos.
 
 ## Installation
 ```powershell
-python3 -m pip install -r requirements.txt
+python3.exe -m pip install -r requirements.txt
 ```
 ### Windows:
 ```powershell
@@ -17,7 +17,7 @@ TBD
 ## Run
 From root directory:
 ```powershell
-python3 src/run.py
+python3.exe src/run.py
 ```
 
 ## Demo
