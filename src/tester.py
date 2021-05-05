@@ -55,7 +55,3 @@ if __name__ == "__main__":
     if len(sys.argv) > 2:
         print("\nPelvic drop:")
         pp.pprint(metrics_lib.pelvic_drop(back_data, False))
-
-    if len(sys.argv) > 2:
-        print("\nParallel legs:")
-        pp.pprint(metrics_lib.parallel_legs(back_data, False))

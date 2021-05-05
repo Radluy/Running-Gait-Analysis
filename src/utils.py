@@ -29,7 +29,7 @@ def angle_3points(k1: Keypoint, k2: Keypoint, k3: Keypoint) -> float:
     Returns:
         float: the angle between three keypoints
     """
-    # https://stackoverflow.com/questions/35176451/python-code-to-calculate-angle-between-three-point-using-their-3d-coordinates
+    # original source: https://stackoverflow.com/questions/35176451/python-code-to-calculate-angle-between-three-point-using-their-3d-coordinates
     a = np.array([k1.x, k1.y])
     b = np.array([k2.x, k2.y])
     c = np.array([k3.x, k3.y])
@@ -78,4 +78,3 @@ def right_leg_front(data: list, frame: dict) -> bool:
             return False
         else:
             return True
-

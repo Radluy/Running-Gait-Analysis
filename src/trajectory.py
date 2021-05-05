@@ -15,9 +15,9 @@ def plot_keypoint_trajectory(data: list, joint: str, image_path: str, save_path:
         joint (str): name of the studied keypoint
         image_path (str): path to one image from pose estimator used to determine dimensions
     """
-    my_dpi = 96
+    my_dpi = 96  # standard monitor DPI
     image = Image.open(image_path)
-    width, height = image.size
+    width, height = image.size  # image coords
 
     x_dims = []
     y_dims = []
@@ -28,10 +28,12 @@ def plot_keypoint_trajectory(data: list, joint: str, image_path: str, save_path:
             print("Incorrect keypoint name")
             return
 
+        # skip if keypoint is not in the frame
         if keypoint.confidence != 0:
             x_dims.append(keypoint.x)
             y_dims.append(height - keypoint.y)
 
+    # 640x360 -> UI image resolution
     fig = plt.figure(figsize=(640/my_dpi, 360/my_dpi), dpi=my_dpi)
     plt.plot(x_dims, y_dims)
     plt.xlim(left=0, right=width)
@@ -39,7 +41,8 @@ def plot_keypoint_trajectory(data: list, joint: str, image_path: str, save_path:
     plt.axis('off')
 
     fig.tight_layout()
-    fig.savefig(os.path.join(save_path,'{}_trajectory.png'.format(joint)), transparent=True)
+    fig.savefig(os.path.join(
+        save_path, '{}_trajectory.png'.format(joint)), transparent=True)
 
 
 if __name__ == "__main__":

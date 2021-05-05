@@ -89,20 +89,21 @@ def CoM_displacement(data: list, show_all: bool) -> dict:
     tmp = chunks[0]
     for chunk in chunks[1:]:
         sublist = []
-        #find indices
-        for frame,i in zip(data,range(len(data))):
+        # find indices
+        for frame, i in zip(data, range(len(data))):
             if frame["ID"] == tmp[0]["ID"]:
                 start = i
             if frame["ID"] == chunk[0]["ID"]:
                 end = i - 2
-        #find highest point
+        # find highest point
         for frame in data[start:end]:
             sublist.append(frame["MidHip"].y)
         if not sublist:
             continue
         top = start + sublist.index(max(sublist))
 
-        displacement_degree = abs(utils.angle_2points(tmp[0]["MidHip"], data[top]["MidHip"]))
+        displacement_degree = abs(utils.angle_2points(
+            tmp[0]["MidHip"], data[top]["MidHip"]))
         if right_direction:
             displacement_degree = 180 - displacement_degree
         if show_all:
@@ -112,7 +113,7 @@ def CoM_displacement(data: list, show_all: bool) -> dict:
 
         tmp = chunk
     return degree_dict
-        
+
 
 def knee_flexion(data: list, show_all: bool) -> dict:
     """Calculate maximum angle of knee flexion during stance phase
@@ -139,6 +140,7 @@ def knee_flexion(data: list, show_all: bool) -> dict:
                     utils.angle_3points(
                         frame["LHip"], frame["LKnee"], frame["LAnkle"])
             angles[frame["ID"]] = angle
+        # find frame according to value
         max_angle_id = max(angles.items(), key=operator.itemgetter(1))[0]
         if show_all:
             angle_dict[max_angle_id] = angles[max_angle_id]
@@ -202,9 +204,11 @@ def feet_strike(data: list, show_all: bool) -> dict:
                 pre_frame = frame
                 break
         if chunk[0]["StanceLeg"] == "Right":
-            angle = abs(utils.angle_2points(pre_frame["RBigToe"], pre_frame["RHeel"]))
+            angle = abs(utils.angle_2points(
+                pre_frame["RBigToe"], pre_frame["RHeel"]))
         else:
-            angle = abs(utils.angle_2points(pre_frame["LBigToe"], pre_frame["LHeel"]))
+            angle = abs(utils.angle_2points(
+                pre_frame["LBigToe"], pre_frame["LHeel"]))
         if not right_direction:
             angle = 180 - angle
         if show_all:
@@ -233,32 +237,38 @@ def hip_extension(data: list, show_all: bool) -> dict:
         post_chunk_id = chunk[0]["ID"] + 1
         list_pos = 0
         for frame in data:
-            if frame["ID"] == post_chunk_id: # after stance
+            if frame["ID"] == post_chunk_id:  # after stance
                 break
             list_pos += 1
 
         tmp_angles = {}
         knee_dict = {}
-        for pos in range(list_pos,list_pos+7): # 7 frames after stance
+        for pos in range(list_pos, list_pos+7):  # 7 frames after stance
             try:
                 frame = data[pos]
-            except IndexError:
+            except IndexError:  # end of video
                 continue
             if chunk[0]["StanceLeg"] == "Right":
-                knee_angle = utils.angle_3points(frame["RAnkle"], frame["RKnee"], frame["RHip"])
+                knee_angle = utils.angle_3points(
+                    frame["RAnkle"], frame["RKnee"], frame["RHip"])
                 knee_dict[frame["ID"]] = knee_angle
 
-                tmp_keypoint = keypoint_class.Keypoint(frame["RHip"].x, frame["RHip"].y-10, 1)
-                angle = utils.angle_3points(frame["RKnee"], frame["RHip"], tmp_keypoint)
+                tmp_keypoint = keypoint_class.Keypoint(
+                    frame["RHip"].x, frame["RHip"].y-10, 1)
+                angle = utils.angle_3points(
+                    frame["RKnee"], frame["RHip"], tmp_keypoint)
             else:
-                knee_angle = utils.angle_3points(frame["LAnkle"], frame["LKnee"], frame["LHip"])
+                knee_angle = utils.angle_3points(
+                    frame["LAnkle"], frame["LKnee"], frame["LHip"])
                 knee_dict[frame["ID"]] = knee_angle
 
-                tmp_keypoint = keypoint_class.Keypoint(frame["LHip"].x, frame["LHip"].y-10, 1)
-                angle = utils.angle_3points(frame["LKnee"], frame["LHip"], tmp_keypoint)
+                tmp_keypoint = keypoint_class.Keypoint(
+                    frame["LHip"].x, frame["LHip"].y-10, 1)
+                angle = utils.angle_3points(
+                    frame["LKnee"], frame["LHip"], tmp_keypoint)
             angle = 180 - angle
             tmp_angles[frame["ID"]] = angle
-
+        # find frame according to value
         max_angle_id = max(knee_dict.items(), key=operator.itemgetter(1))[0]
         if show_all:
             angle_dict[max_angle_id] = tmp_angles[max_angle_id]
@@ -280,6 +290,7 @@ def pelvic_drop(data: list, show_all: bool) -> dict:
     FILTER = 80
     MAX_ANGLE = 6
     angle_dict = {}
+    # first 40 frames -> runner is too small later and estimator isn't accurate
     for frame in data[0:40]:
         angle = utils.angle_2points(frame["RHip"], frame["LHip"])
         angle = abs(angle)
@@ -287,30 +298,7 @@ def pelvic_drop(data: list, show_all: bool) -> dict:
             angle_dict[frame["ID"]] = angle
         elif angle > MAX_ANGLE and angle < FILTER:
             angle_dict[frame["ID"]] = angle
-    
-    return angle_dict
 
-
-def parallel_legs(data: list, show_all: bool) -> dict:
-    """Determine if thighs are parallel from back view
-
-    Args:
-        data (list): data structure of keypoint positions from pose estimator - back view
-        show_all (bool): whether to return values for each stance or only irregular ones
-
-    Returns:
-        dict: dictionary of frame IDs and angles between legs
-    """
-    angle_dict = {}
-    for frame in data[10:30]:
-        angle_R = utils.angle_2points(frame["RKnee"], frame["RHip"])
-        angle_L = utils.angle_2points(frame["LKnee"], frame["LHip"])
-        diff = abs(angle_R - angle_L)
-        if show_all:
-            angle_dict[frame["ID"]] = diff
-        elif diff > 10:
-            angle_dict[frame["ID"]] = diff
-    
     return angle_dict
 
 

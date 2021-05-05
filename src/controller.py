@@ -1,4 +1,4 @@
-import sys 
+import sys
 import filetype
 import os
 from folderClass import folderStruct
@@ -13,6 +13,7 @@ from metric_description import corresponding_keypoints
 
 
 data = None
+
 
 def check_formal_reqs(path: str) -> bool:
     """Checks formal requirements for directory like existance of necessary files
@@ -30,7 +31,7 @@ def check_formal_reqs(path: str) -> bool:
     if not os.path.isdir(path):
         print("log: Input path is not a directory!", file=sys.stderr)
         return False
-    
+
     files = os.listdir(path)
     for file in files:
         if file == "images":
@@ -39,7 +40,7 @@ def check_formal_reqs(path: str) -> bool:
             json_exists = True
         elif file == "video_est.avi":
             video_exists = True
-    
+
     if not json_exists or not images_exist or not video_exists:
         print("log: Missing data in directory!", file=sys.stderr)
         return False
@@ -84,14 +85,21 @@ def evaluate(side_data: folderStruct, back_data: folderStruct) -> dict:
 
     try:
         metric_values["Torso Lean"] = metrics_lib.torso_lean(frames, False)
-        metric_values["Knee Flexion"] = metrics_lib.knee_flexion(side_data, False)
-        metric_values["Tibia Angle"] = metrics_lib.tibia_angle(side_data, False)
-        metric_values["Center of Mass Displacement"] = metrics_lib.CoM_displacement(side_data, False)
+        metric_values["Knee Flexion"] = metrics_lib.knee_flexion(
+            side_data, False)
+        metric_values["Tibia Angle"] = metrics_lib.tibia_angle(
+            side_data, False)
+        metric_values["Center of Mass Displacement"] = metrics_lib.CoM_displacement(
+            side_data, False)
         metric_values["Elbow Angle"] = metrics_lib.elbow_angle(frames, False)
-        metric_values["Hip Extension"] = metrics_lib.hip_extension(side_data, False)
-        metric_values["Feet Strike"] = metrics_lib.feet_strike(side_data, False)
-        metric_values["Pelvic Drop"] = metrics_lib.pelvic_drop(back_data, False)
-        metric_values["Parallel Legs"] = metrics_lib.parallel_legs(back_data, False)
+        metric_values["Hip Extension"] = metrics_lib.hip_extension(
+            side_data, False)
+        metric_values["Feet Strike"] = metrics_lib.feet_strike(
+            side_data, False)
+        metric_values["Pelvic Drop"] = metrics_lib.pelvic_drop(
+            back_data, False)
+        metric_values["Parallel Legs"] = metrics_lib.parallel_legs(
+            back_data, False)
     except:
         pass
 
@@ -108,10 +116,10 @@ def backend_setup(path1: str) -> folderStruct:
         folderStruct: folderStruct instance with loaded data corresponding to input
         or None if path is not valid
     """
-    if os.path.isdir(path1):
+    if os.path.isdir(path1):  # directory -> load files
         return load_folder_struct(path1)
 
-    try:
+    try:  # check for correct video file format
         kind = filetype.guess(path1)
     except:
         print("log: File is not a video!", file=sys.stderr)
@@ -119,15 +127,15 @@ def backend_setup(path1: str) -> folderStruct:
 
     if kind is None:
         return None
-        
-    if kind.mime[0:5] == "video":
+
+    if kind.mime[0:5] == "video":  # video -> call estimator
         new_path = estimate(path1)
         return load_folder_struct(new_path)
     else:
         return None
 
 
-def auto_sync(side_data: folderStruct, back_data: folderStruct)-> dict:
+def auto_sync(side_data: folderStruct, back_data: folderStruct) -> dict:
     """Calls automatic synchronization module to determine sync points
 
     Args:
@@ -138,7 +146,7 @@ def auto_sync(side_data: folderStruct, back_data: folderStruct)-> dict:
         [dict]: dictionary with frame IDs of the sync point from both views
     """
     chunks = sd.stance_detector(side_data, True)
-    if chunks[0][0]["StanceLeg"] == "Right":
+    if chunks[0][0]["StanceLeg"] == "Right":  # first stance leg
         leg = "L"
     else:
         leg = "R"
@@ -154,8 +162,8 @@ def auto_sync(side_data: folderStruct, back_data: folderStruct)-> dict:
 
 
 def setup_highlight(frame_id: str, side_data: folderStruct, back_data: folderStruct, metric_name: str):
-        
-    #get frame dict by id
+
+    # get frame dict by id
     if metric_name in ["Pelvic Drop", "Parallel Legs"]:
         data_set = back_data
     else:
@@ -166,13 +174,14 @@ def setup_highlight(frame_id: str, side_data: folderStruct, back_data: folderStr
             corr_frame = frame
             break
 
-    #image dimensions
+    # image dimensions
     image = Image.open(data_set.images[0])
     width, height = image.size
 
     right_direction = utils.is_going_right(side_data.data)
     right_front = utils.right_leg_front(side_data.data, corr_frame)
 
+    # leg specific metric -> according to stance leg and direction
     if metric_name in ["Knee Flexion", "Tibia Angle", "Feet Strike", "Hip Extension"]:
         if right_front:
             metric_name = metric_name + "R"
@@ -183,8 +192,8 @@ def setup_highlight(frame_id: str, side_data: folderStruct, back_data: folderStr
             metric_name = metric_name + "R"
         else:
             metric_name = metric_name + "L"
-    
-    #determine points on canvas
+
+    # determine points on canvas
     keypoints = corresponding_keypoints[metric_name]
     points = []
     for keypoint in keypoints:
@@ -193,8 +202,5 @@ def setup_highlight(frame_id: str, side_data: folderStruct, back_data: folderStr
         new_point.x = int(point.x/width*640)
         new_point.y = int(point.y/height*360)
         points.append(new_point)
-    
+
     return points
-
-
-        

@@ -22,10 +22,10 @@ def find_side_sync_point(side_data: list) -> int:
     for frame in chunk:
         if frame["StanceLeg"] == "Right":
             angle = utils.angle_3points(
-                    frame["LAnkle"], frame["LKnee"], frame["LHip"])
+                frame["LAnkle"], frame["LKnee"], frame["LHip"])
         else:
             angle = utils.angle_3points(
-                    frame["RAnkle"], frame["RKnee"], frame["RHip"])
+                frame["RAnkle"], frame["RKnee"], frame["RHip"])
         if angle < min_angle:
             min_angle = angle
             min_id = frame["ID"]
@@ -33,7 +33,7 @@ def find_side_sync_point(side_data: list) -> int:
     return min_id
 
 
-def find_back_sync_point(back_data: list, leg: str)-> int:
+def find_back_sync_point(back_data: list, leg: str) -> int:
     """find synchronization frame from back view
     frame with ankle highest above knee of the back leg
 
@@ -47,7 +47,7 @@ def find_back_sync_point(back_data: list, leg: str)-> int:
     distance = sys.maxsize
     current_id = back_data[0]["ID"]
     for frame in back_data[1:]:
-        
+        # skip frame if the needed joints are not in it
         if frame["RKnee"].confidence == 0 or frame["RAnkle"].confidence == 0 or \
            frame["LKnee"].confidence == 0 or frame["LAnkle"].confidence == 0 or \
            frame["LShoulder"].confidence == 0 or frame["RShoulder"].confidence == 0 or \
@@ -56,14 +56,16 @@ def find_back_sync_point(back_data: list, leg: str)-> int:
 
         new_distance = frame[leg+"Knee"].y - frame[leg+"Ankle"].y
         if new_distance > distance:
-            return current_id
+            return current_id  # end if stops rising
         else:
             distance = new_distance
             current_id = frame["ID"]
 
     return current_id
 
+
 if __name__ == "__main__":
+    # sync two videos and print their sync point IDs
     side_data = jl.load_json(sys.argv[1])
     back_data = jl.load_json(sys.argv[2])
 

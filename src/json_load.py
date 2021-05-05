@@ -12,6 +12,7 @@ from keypoint_class import Keypoint
 #          head:  x,y
 #         }
 
+# order of keypoints specified in OpenPose documentation
 keypoint_order = ["Nose", "Neck", "RShoulder", "RElbow", "RWrist", "LShoulder",
                   "LElbow", "LWrist", "MidHip", "RHip", "RKnee", "RAnkle", "LHip",
                   "LKnee", "LAnkle", "REye", "LEye", "REar", "LEar", "LBigToe",
@@ -37,14 +38,13 @@ def load_json(json_directory_path: str) -> list:
             json_struct = json.load(json_file)
             try:
                 keypoints = json_struct["people"][0]["pose_keypoints_2d"]
-            except:
-                #print("log: empty frame!", file=sys.stderr)
+            except:  # skip empty frames
                 continue
             keypoint_dict = {}
             keypoint_dict["ID"] = counter
             iterator = iter(keypoints)
             i = 0
-            for x in iterator:
+            for x in iterator:  # iterate 3 at a time (x,y,conf)
                 y = next(iterator)
                 confidence = next(iterator)
                 keypoint = Keypoint(x, y, confidence)

@@ -14,6 +14,7 @@ def create_frame_chunks(frame_list: list) -> list:
     tmp_frame = frame_list[0]
     chunk_list = [[tmp_frame]]
 
+    # merge into list if they're concurrent
     for frame in frame_list[1:]:
         if frame["ID"] == tmp_frame["ID"]+1:
             chunk_list[-1].append(frame)
@@ -22,6 +23,7 @@ def create_frame_chunks(frame_list: list) -> list:
         tmp_frame = frame
 
     return chunk_list
+
 
 def stance_detector(data: list, merge_to_chunks: bool) -> list:
     """Finds frames with runner in a stance phase
@@ -32,17 +34,18 @@ def stance_detector(data: list, merge_to_chunks: bool) -> list:
     Returns:
         list: array of frames with stance phase detected
     """
-    FOOT_EPSILON = 10
-    TIBIA_EPSILON = 25
+    FOOT_EPSILON = 10  # max possible angle
+    TIBIA_EPSILON = 25  # max possible angle
     frame_list = []
     keypoints = ["RBigToe", "RHeel", "LBigToe",
                  "LHeel", "RKnee", "RAnkle", "LKnee", "LAnkle"]
 
     for frame in data:
-        for keypoint in keypoints:
+        for keypoint in keypoints:  # skip if needed keypoints not in the frame
             if frame[keypoint].confidence == 0:
                 break
         else:
+            # add to results if angles are within limit
             foot_R_angle = abs(utils.angle_2points(
                 frame["RBigToe"], frame["RHeel"]))
             foot_L_angle = abs(utils.angle_2points(
