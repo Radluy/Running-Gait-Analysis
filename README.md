@@ -2,22 +2,32 @@
 Desktop application for evaluating your running technique from videos.
 
 ## Installation
-```powershell
-python3.exe -m pip install -r requirements.txt
-```
 ### Windows:
 ```powershell
+python3 -m  venv env/
+
+./env/Scripts/Activate.ps1
+
+python -m pip install -r requirements.txt
+
 ./setup.ps1
 ```
+
 ### Linux/MacOS:
 ```powershell
+python3 -m  venv env/
+
+./env/Scripts/activate
+
+python -m pip install -r requirements.txt
+
 TBD
 ```
 
 ## Run
 From root directory:
 ```powershell
-python3.exe src/run.py
+python src/run.py
 ```
 
 ## Demo
