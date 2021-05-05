@@ -54,12 +54,6 @@ class SideView(QtWidgets.QWidget):
 
         self.set_placeholder()
 
-    def paintEvent(self, event):
-        """painter = QtGui.QPainter(self)
-        painter.setPen(QtCore.Qt.red)
-        
-        painter.drawLine(500,500,200,200)"""
-
     def set_placeholder(self):
         pixmap = QtGui.QPixmap('./src/images/dark-placeholder.png')
         self.sideViewLabel.setPixmap(pixmap)
@@ -75,7 +69,7 @@ class SideView(QtWidgets.QWidget):
         opener.setFileMode(QtWidgets.QFileDialog.Directory)
         self.video_url = str(
             opener.getExistingDirectory(self, "Select Directory"))
-        
+
     def play_video(self):
         global SIDE_FILE_STRUCT
         if SIDE_FILE_STRUCT is None:
@@ -148,6 +142,7 @@ class BackView(QtWidgets.QWidget):
 class Worker(QtCore.QObject):
     finished = QtCore.pyqtSignal()
     failed = QtCore.pyqtSignal()
+
     def __init__(self, side_video, back_video, parent=None):
         super(Worker, self).__init__(parent)
         self.side_video = side_video
@@ -173,7 +168,7 @@ class Worker(QtCore.QObject):
             return
         else:
             SIDE_FILE_STRUCT.metric_values = controller.evaluate(
-            SIDE_FILE_STRUCT.data, BACK_FILE_STRUCT.data)
+                SIDE_FILE_STRUCT.data, BACK_FILE_STRUCT.data)
 
         self.finished.emit()
 
@@ -201,7 +196,8 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.sideLabel.setText("SIDE VIEW - FRAME: {}".format(frame_id))
 
         if self.syncOffset != None:
-            self.backViewSlider.setValue(self.sideViewSlider.value() - self.syncOffset)
+            self.backViewSlider.setValue(
+                self.sideViewSlider.value() - self.syncOffset)
 
     def setBackSliderLength(self):
         global BACK_FILE_STRUCT
@@ -224,7 +220,8 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.backLabel.setText("BACK VIEW - FRAME: {}".format(frame_id))
 
         if self.syncOffset != None:
-            self.sideViewSlider.setValue(self.backViewSlider.value() + self.syncOffset)
+            self.sideViewSlider.setValue(
+                self.backViewSlider.value() + self.syncOffset)
 
     def processingVideoGif(self):
         self.processButton.setEnabled(False)
@@ -247,7 +244,7 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.backView.backViewLabel.setMovie(self.loading_gif)
 
         self.loading_gif.start()
-  
+
     def endLoadingGif(self):
         self.loading_gif.stop()
         self.sideView.set_placeholder()
@@ -296,7 +293,8 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.worker.failed.connect(self.worker.deleteLater)
         self.worker.failed.connect(self.bad_input)
 
-        self.raisePopup("Processing a video might take several minutes.\n Go make yourself a cup of coffee in the meantime.")
+        self.raisePopup(
+            "Processing a video might take several minutes.\n Go make yourself a cup of coffee in the meantime.")
         self.thread.start()
         self.processingVideoGif()
 
@@ -326,7 +324,7 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if chosen_metric == "None":
             self.hideRadioButtons()
             return
-        
+
         self.hideRadioButtons()
 
         try:
@@ -369,7 +367,7 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.metricDescriptionText.setText("{descrip}\n\nAngle = {angle}".format(
             angle=angle, descrip=description[curr_metric]))
         chosen = self.metricSelectComboBox.currentText()
-        if chosen == "Pelvic Drop" or chosen == "Parallel Legs":
+        if chosen == "Pelvic Drop":
             i = 0
             for frame in BACK_FILE_STRUCT.data:
                 if frame["ID"] == int(ID):
@@ -388,7 +386,8 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.popup = popup(text)
 
         centerPoint = QtWidgets.QDesktopWidget().availableGeometry().center()
-        self.popup.move(centerPoint.x() - (self.popup.width() * 0.5), centerPoint.y() - (self.popup.height() * 0.5))
+        self.popup.move(centerPoint.x() - (self.popup.width() * 0.5),
+                        centerPoint.y() - (self.popup.height() * 0.5))
 
         self.popup.show()
 
@@ -409,15 +408,16 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if SIDE_FILE_STRUCT is None or BACK_FILE_STRUCT is None:
             button.setChecked(False)
             return self.raisePopup("Both views needed\nfor synchronization")
-        
+
         if button.isChecked() == True:
             self.syncCheckBox.setChecked(False)
-            id_dict = controller.auto_sync(SIDE_FILE_STRUCT.data, BACK_FILE_STRUCT.data)
+            id_dict = controller.auto_sync(
+                SIDE_FILE_STRUCT.data, BACK_FILE_STRUCT.data)
             self.syncOffset = id_dict["side"] - id_dict["back"]
             self.sideViewSlider.setValue(id_dict["side"])
             self.backViewSlider.setValue(id_dict["back"])
         else:
-            self.syncOffset = None   
+            self.syncOffset = None
 
     def highlight_metric(self, metric):
 
@@ -425,14 +425,14 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             pixmap = self.backView.backViewLabel.pixmap()
         else:
             pixmap = self.sideView.sideViewLabel.pixmap()
-        #painter setup
+        # painter setup
         painter = QtGui.QPainter(pixmap)
         pen = QtGui.QPen()
         pen.setWidth(6)
         pen.setColor(QtGui.QColor(255, 255, 255, 180))
         painter.setPen(pen)
 
-        #get frame id from radiobox text
+        # get frame id from radiobox text
         frame_id = None
         items = (self.radioLayout.itemAt(i).widget()
                  for i in range(self.radioLayout.count()))
@@ -444,16 +444,19 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if not frame_id:
             return
 
-        points = controller.setup_highlight(frame_id, SIDE_FILE_STRUCT, BACK_FILE_STRUCT, metric)
+        points = controller.setup_highlight(
+            frame_id, SIDE_FILE_STRUCT, BACK_FILE_STRUCT, metric)
 
         painter.drawLine(points[0].x, points[0].y, points[1].x, points[1].y)
 
         if len(points) == 3:
-            painter.drawLine(points[1].x, points[1].y, points[2].x, points[2].y)
+            painter.drawLine(points[1].x, points[1].y,
+                             points[2].x, points[2].y)
 
         if len(points) == 4:
-            painter.drawLine(points[2].x, points[2].y, points[3].x, points[3].y)
-        
+            painter.drawLine(points[2].x, points[2].y,
+                             points[3].x, points[3].y)
+
         painter.end()
 
     def drawTrajectory(self):
@@ -466,8 +469,9 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if SIDE_FILE_STRUCT is None:
             self.raisePopup("Import your video first!")
             return
-        
-        self.sideViewTrajectory.setStyleSheet("QLabel{ background-color: transparent;}")
+
+        self.sideViewTrajectory.setStyleSheet(
+            "QLabel{ background-color: transparent;}")
         trajectory = QtGui.QPixmap(SIDE_FILE_STRUCT.trajectories[keypoint])
         self.sideViewTrajectory.move(5, 18)
         self.sideViewTrajectory.setPixmap(trajectory)
@@ -522,7 +526,8 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                  for i in range(self.radioLayout.count()))
         for radioButton in items:
             radioButton.clicked.connect(self.writeDescription)
-            radioButton.clicked.connect(lambda:self.highlight_metric(self.metricSelectComboBox.currentText()))
+            radioButton.clicked.connect(lambda: self.highlight_metric(
+                self.metricSelectComboBox.currentText()))
             policy = QtWidgets.QSizePolicy()
             policy.setRetainSizeWhenHidden(True)
             radioButton.setSizePolicy(policy)
@@ -539,8 +544,10 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.playSideVideoButton.clicked.connect(self.sideView.play_video)
         self.sideView.mediaPlayer.mediaStatusChanged.connect(
             self.sideView.cleanAfterVideo)
-        self.syncCheckBox.stateChanged.connect(lambda:self.synchronizeViews(self.syncCheckBox))
-        self.autoSyncCheckBox.stateChanged.connect(lambda:self.autoSync(self.autoSyncCheckBox))
+        self.syncCheckBox.stateChanged.connect(
+            lambda: self.synchronizeViews(self.syncCheckBox))
+        self.autoSyncCheckBox.stateChanged.connect(
+            lambda: self.autoSync(self.autoSyncCheckBox))
 
 
 if __name__ == "__main__":
