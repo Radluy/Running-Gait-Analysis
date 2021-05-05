@@ -98,8 +98,6 @@ def evaluate(side_data: folderStruct, back_data: folderStruct) -> dict:
             side_data, False)
         metric_values["Pelvic Drop"] = metrics_lib.pelvic_drop(
             back_data, False)
-        metric_values["Parallel Legs"] = metrics_lib.parallel_legs(
-            back_data, False)
     except:
         pass
 
@@ -164,7 +162,7 @@ def auto_sync(side_data: folderStruct, back_data: folderStruct) -> dict:
 def setup_highlight(frame_id: str, side_data: folderStruct, back_data: folderStruct, metric_name: str):
 
     # get frame dict by id
-    if metric_name in ["Pelvic Drop", "Parallel Legs"]:
+    if metric_name in ["Pelvic Drop"]:
         data_set = back_data
     else:
         data_set = side_data
