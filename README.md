@@ -15,18 +15,13 @@ python -m pip install -r requirements.txt
 
 ### Linux/MacOS:
 ```powershell
-python3 -m  venv env/
-
-./env/Scripts/activate
-
-python -m pip install -r requirements.txt
-
 TBD
 ```
 
 ## Run
 From root directory:
 ```powershell
+./env/Scripts/Activate.ps1
 python src/run.py
 ```
 
