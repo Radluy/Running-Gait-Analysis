@@ -1,5 +1,8 @@
 # Running gait analysis
-Desktop application for evaluating your running technique from videos.
+Desktop application for evaluating your running technique from videos. \
+This project was created as a Bachelor's thesis at Brno University of Technology, Faculty of Information Technology. It uses a state-of-the-art neural network for pose estimation and requires no special equipment. It's designed for beginner runners and the recordings can be done with a regular smartphone.
+
+Text of the thesis can be found at: [link](https://www.fit.vut.cz/study/thesis/23845/.en)
 
 ## Installation
 ### Windows:
@@ -11,11 +14,6 @@ python3 -m  venv env/
 python -m pip install -r requirements.txt
 
 ./setup.ps1
-```
-
-### Linux/MacOS:
-```powershell
-TBD
 ```
 
 ## Run
